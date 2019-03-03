@@ -32,7 +32,7 @@ export default class newsDetailView extends Component<Props> {
         };
         this.id = this.props.navigation.getParam('id', '1');
         const type = this.props.navigation.getParam('type', 1);
-        this.tag = '';
+        this.tag = '1';
         if (type == 0)
             this.tag = "【公告】";
         else if (type == 1)

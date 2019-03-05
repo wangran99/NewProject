@@ -17,6 +17,7 @@ var MainView = require('./pages/mainView')
 var TestView = require('./pages/testView')
 var AuthView = require('./pages/authLoadingView')
 var NewsDetailView = require('./pages/newsDetailView')
+var OrderDetailView = require('./pages/orderDetailView')
 
 
 const instructions = Platform.select({
@@ -32,6 +33,7 @@ const AppStack = createStackNavigator(
     // UserLogin: UserLoginView,
     Main: MainView,
     NewsDetail: NewsDetailView,
+    OrderDetail: OrderDetailView,
     Test: TestView,
   },
   {
@@ -62,8 +64,8 @@ const AppContainer = createAppContainer(createSwitchNavigator(
     Test: TestView,
   },
   {
-      initialRouteName: 'AuthLoading',
-  //  initialRouteName: 'Test',
+    initialRouteName: 'AuthLoading',
+    //  initialRouteName: 'Test',
   }
 ));
 

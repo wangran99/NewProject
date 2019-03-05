@@ -14,9 +14,13 @@ let uid;
 _bootstrapAsync = async () => {
     //   cookie = await local.get("cookie");
     account = await local.get("account");
+    console.warn("http get account:" + account)
     username = await local.get("username");
+    console.warn("http get username:" + username)
     password = await local.get("password");
+    console.warn("http get password:" + password)
     uid = await local.get("uid");
+    console.warn("http get uid:" + uid)
 }
 
 
@@ -28,7 +32,7 @@ var instance = axios.create({
         //    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
         'Accept': 'application/json',
         // 'X-Custom-Header': 'foobar',
-        'Cookie': cookie,
+        // 'Cookie': cookie,
         'Accept-Encoding': 'gzip, deflate',
         'Connection': 'keep-alive',
         'X-Requested-With': 'XMLHttpRequest',
@@ -44,7 +48,7 @@ instance.defaults.withCredentials = true;
 instance.interceptors.request.use(
     config => {
         if (instance.Authorization != '') {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-            config.headers.Authorization = '';
+            // config.headers.Authorization = '';
         }
         // config.headers = {
         //     // 'Content-Type':'application/x-www-form-urlencoded'
@@ -182,22 +186,57 @@ function extend(target, source) {
  */
 
 export function postData(url, params = {}) {
-    if (!uid)
-        _bootstrapAsync();
-    let data = extend({ account: account, username: username, password: password, uid: uid }, params);
-    return new Promise((resolve, reject) => {
-        let pp = qs.stringify(
-            data,
-            // { arrayFormat: 'brackets' }
-        );
-        instance.post(url, pp)
-            .then(response => {
+    if (!uid) {
+        return new Promise((resolve, reject) => {
+            local.get("account").then((value) => {
+                account = value;
+                return local.get("username");
+            }).then((value) => {
+                username = value;
+                return local.get("password");
+            }).then((value) => {
+                password = value;
+                return local.get("uid");
+            }).then((value) => {
+                uid = value;
+                let data = extend({ account, username, password, uid }, params);
+
+                let pp = qs.stringify(data);
+                return instance.post(url, pp);
+
+            }).then((response) => {
+                console.warn("response:" + JSON.stringify(response));
                 resolve(response.data);
-            }, err => {
-                console.warn("Post function error:" + JSON.stringify(err));
-                reject(err);
-            })
-    })
+            }).catch(e => {
+                console.warn("my error:" + JSON.stringify(e));
+                reject(e);
+            });
+        })
+    } else {
+        let data = extend({ account, username, password, uid }, params);
+        let pp = qs.stringify(data);
+        return new Promise((resolve, reject) => {
+            instance.post(url, pp).then(response => {
+                resolve(response.data);
+            }).catch(e => {
+                console.warn("post2 error:" + JSON.stringify(e));
+                reject(e);
+            });
+        });
+    }
+
+}
+//登录专用
+export function loginPost(url, params = {}) {
+    let pp = qs.stringify(params);
+    return new Promise((resolve, reject) => {
+        instance.post(url, pp).then(response => {
+            resolve(response.data);
+        }).catch(e => {
+            console.warn("post2 error:" + JSON.stringify(e));
+            reject(e);
+        });
+    });
 }
 // 重置原始数据
 export function resetData(url, params = {}) {
@@ -206,6 +245,15 @@ export function resetData(url, params = {}) {
     username = null;
     password = null;
     uid = null;
+}
+
+// 登录后在内存中保存登录原始数据
+export function saveData(params = {}) {
+    cookie = null;
+    account = params.account;
+    username = params.username;
+    password = params.password;
+    uid = uid;
 }
 
 /**

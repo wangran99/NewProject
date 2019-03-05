@@ -37,7 +37,7 @@ var local = {
      * */
     set(key, data, expires, id) {
         let setValue = JSON.stringify(data);
-        console.log("storage, key:" + key + " value:" + setValue);
+        //    console.log("storage found!, key:" + key + " value:" + setValue);
         if (id) {
             storage.save({
                 key: key,
@@ -51,7 +51,7 @@ var local = {
                 data: setValue,
                 expires: expires ? expires : null
             }).catch(err => {
-                console.warn("storage save error。key:" + key + ",data:" + data);
+                console.warn("storage save error! key:" + key + ",data:" + data);
                 reject(err);
             })
         }
@@ -95,13 +95,13 @@ var local = {
                 return JSON.parse(ret);
             }).catch(err => {
 
-                console.warn("storage not found key:" + key + JSON.stringify(err));
-                reject(err);
+                console.warn("storage not found key:" + key + ",error:" + JSON.stringify(err));
+            //    reject(err);
                 /**
                  * 抛出错误
                  * 注释部分为抛出详细错误
                  * */
-                // throw err;
+                 throw err;
                 /* switch (err.name) {
                      case 'NotFoundError':
                          throw err.message;
@@ -131,7 +131,7 @@ var local = {
                 id: id
             })
         } else {
-            storage.remove({
+           return storage.remove({
                 key: key
             })
         }

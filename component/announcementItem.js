@@ -39,7 +39,8 @@ export default class announcementItem extends Component {
           </View>
           <Text style={{ fontSize: 16, marginTop: 5 }}
             numberOfLines={3}>
-            {data.details}
+            {/* 发布的html原文去掉各种html标签，只显示内容 */}
+            {data.details.replace(/<[^>]+>/g, "")}
           </Text>
         </View>
       </TouchableOpacity>

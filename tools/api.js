@@ -1,4 +1,4 @@
-import { instance, getData, getHeader, post, postData, resetData } from './http.js'
+import { instance, getData, getHeader, post, postData, resetData, saveData, loginPost } from './http.js'
 
 
 class httpapi {
@@ -15,13 +15,14 @@ class httpapi {
     // }
 
     static companyLogin(param = {}) {
-        return postData("/Login.asmx/Login_Company", param);
+        return loginPost("/Login.asmx/Login_Company", param);
     }
 
     static personLogin(account, username, password) {
-        return postData("/Login.asmx/Login_User", { account: account, username: username, password: password });
+        return loginPost("/Login.asmx/Login_User", { account: account, username: username, password: password });
     }
 
+    // 公告列表
     static getAnnouncement(page, keys = '') {
         return postData("/commList.asmx/NewsList", { page: page, keys: keys });
     }
@@ -29,17 +30,24 @@ class httpapi {
     static getAnnouncementDetail(id) {
         return postData("/commList.asmx/NewsDetails", { id });
     }
-
-    static getAnnouncementDetail(id) {
-        return postData("/commList.asmx/NewsDetails", { id: id });
+    // 抢单列表
+    static getOrderQiang() {
+        return postData("/Order.asmx/ReceiveOrderQiang");
     }
 
+    static getOrderDetails(orderid){
+        return   postData("/Order.asmx/OrderDetails", { orderid });
+    }
+
+    static saveLogin(params = {}) {
+        saveData(params = {});
+    }
     static logout() {
         resetData();
     }
 
     static getPersonInfo() {
-        return postData("/commlist.ashx", { parms: [0, 12] });
+        return postData("/commList.asmx/UserInfo");
     }
 }
 

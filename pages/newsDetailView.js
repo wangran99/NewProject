@@ -3,6 +3,8 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { Button as AButton, Provider, Toast } from '@ant-design/react-native';
+// import HTMLView from 'react-native-htmlview';
+import MyWebView from 'react-native-webview-autoheight';
 //import AButton from '@ant-design/react-native/lib/button';
 import { Platform, StyleSheet, Text, TextInput, Image, View, Alert, AsyncStorage } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
@@ -45,7 +47,8 @@ export default class newsDetailView extends Component<Props> {
 
         httpApi.getAnnouncementDetail(this.id).then((data) => {
             let title = this.tag.concat(data.Table[0].headline);
-            let content = data.Table[0].details.replace(/<[^>]+>/g, "");
+            //   let content = data.Table[0].details.replace(/<[^>]+>/g, "");
+            let content = data.Table[0].details;
             let addTime = data.Table[0].addtime;
             this.setState({
                 title, content, addTime
@@ -53,13 +56,24 @@ export default class newsDetailView extends Component<Props> {
         });
     }
     render() {
+        // var htmlContent = '<p><a href="">&hearts; nice job!</a></p>';
+        // const customStyle = "<style>* {max-width: 100%;} body {font-family: sans-serif;} h1 {color: red;}</style>";
+        // const htmlContent = "<h1>This is title</h1><p>Throw your entire HTML here</p>";
         return (
 
             <ScrollView style={{ backgroundColor: 'lightgray' }}>
                 <View style={styles.container}>
-                    <Text style={{ fontSize: 20, color: "black", marginVertical: 20, }}>{this.state.title}</Text>
+                    <Text style={{ fontSize: 20, color: "black", marginVertical: 20, textAlign:'center'}} >{this.state.title}</Text>
                     <Text style={{ fontSize: 15 }}>{this.state.addTime}</Text>
-                    <Text style={{ fontSize: 19, marginVertical: 15, marginHorizontal: 20 }}>{this.state.content}</Text>
+
+                    <MyWebView
+                        style={{marginVertical:20, backgroundColor: 'lightgray' }}
+                        source={{ html: this.state.content }}
+                        startInLoadingState={true}
+                   
+                    />
+
+                    {/* <Text style={{ fontSize: 19, marginVertical: 15, marginHorizontal: 20 }}>{this.state.content}</Text> */}
 
                 </View>
             </ScrollView>

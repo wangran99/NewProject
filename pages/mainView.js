@@ -12,6 +12,7 @@ import local from '../tools/storage'
 import httpApi from '../tools/api'
 import WorkInfoItem from '../component/workInfoItem'
 import AnnouncementItem from '../component/announcementItem'
+import OrderItem from '../component/orderItem'
 import DismissKeyboardView from '../component/dismissKeyboardView'
 import { TextInput } from 'react-native-gesture-handler';
 
@@ -75,6 +76,11 @@ var announcementTest = {
     "Table": [],
     "Table1": [{ "counts": 3, "pagecounts": 1 }]
 }
+
+var orderListTest = {
+    "Table": [],
+    "Table1": [{ "counts": 3, "pagecounts": 1 }]
+}
     ;
 type Props = {};
 export default class mainView extends Component<Props> {
@@ -108,6 +114,7 @@ export default class mainView extends Component<Props> {
             // 用相应的clone方法设置datasource的初始值
             // 创建ListView datasource数据源
             announcement: announcementTest,
+            orderList: orderListTest,
             isRefreshing: false,
 
         };
@@ -123,6 +130,8 @@ export default class mainView extends Component<Props> {
             // Alert.alert('person name:' + personInfo.Table[0].jobnumber, JSON.stringify(personInfo));
             this.setState({ personInfo })
         });
+        this.refreshgetAnnouncement("");
+        this.getOrderList();
     }
 
     _getAnnouncement(page, keys) {
@@ -299,11 +308,69 @@ export default class mainView extends Component<Props> {
 
     renderOrderView() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
-                <SearchBar placeholder="OrderView" showCancelButton />
-                <Text style={{ margin: 50 }}>OrderView</Text>
+            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'lightgray' }}>
+                {/* <SearchBar placeholder="OrderView" showCancelButton /> */}
+                <View alignItems='center'>
+                    <Text style={{ margin: 2, fontSize: 20 }} alignSelf='center'>出门请核对物料</Text>
+                </View>
+                <FlatList
+                    style={{ marginTop: 2 }}
+                    refreshing={this.state.isRefreshing}
+                    onRefresh={this.getOrderList.bind(this)}
+                    // onEndReached={this.fetchMoreAnnouncement.bind(this)}
+                    // onEndReachedThreshold={0.1}
+                    initialNumToRender={10}
+                    ListEmptyComponent={() => {
+                        return (
+
+                            <TouchableOpacity
+                                style={{ flex: 1 }}
+                                onPress={() => this.getOrderList()}
+                                activeOpacity={0.3}>
+                                <View style={{ flex: 1, height: 350, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
+                                    {/* <View style={{ flex: 1, backgroundColor: 'lightgray' }}></View> */}
+                                    <Image style={{
+                                        width: 80,
+                                        height: 80,
+                                    }} source={require('../img/refresh.jpg')}></Image>
+                                    <Text style={{ marginTop: 20, fontSize: 20 }}>请点击或下拉刷新</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    }}
+                    ItemSeparatorComponent={() => {
+                        return (
+                            <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+                        )
+                    }}
+                    ListFooterComponent={() => {
+                        return (
+                            this.state.announcement.Table.length !== 0 ?
+                                <View style={{ marginTop: 30, marginBottom: 25 }}>
+                                    <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+                                    <Text style={{ alignSelf: 'center', marginTop: 20 }}>没有数据了</Text>
+                                </View> : null
+                        )
+                    }}
+                    data={this.state.orderList.Table}
+                    renderItem={({ item }) => <OrderItem data={item} style={{ margin: 22 }}
+                        onPress={() => {
+                            let a = 0;
+                            let b = item;
+                            this.props.navigation.navigate('OrderDetail', { id: item.id });
+                        }} />}
+                    removeClippedSubviews={true}
+                />
             </View>
         );
+    }
+
+    getOrderList() {
+        httpApi.getOrderQiang().then((data) => {
+            this.setState({
+                orderList: data
+            });
+        });
     }
 
     renderWorkView() {
@@ -320,7 +387,7 @@ export default class mainView extends Component<Props> {
                     selectedIndex={2}
                     autoplay
                     infinite
-                     autoplayInterval={3000}
+                    autoplayInterval={3000}
                 //    afterChange={this.onHorizontalSelectedIndexChange}
                 >
                     <Image style={{ width: width, height: slideImageWidth }} source={require('../img/slide0.png')} resizeMode='cover'></Image>
@@ -374,7 +441,7 @@ export default class mainView extends Component<Props> {
                 <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
                     {/*{头像}*/}
                     <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} />
-                    <Text style={[styles.nameText,]}>{this.state.personInfo.Table[0].jobnumber}</Text>
+                    <Text style={[styles.nameText,]}>{this.state.personInfo.Table[0].username}</Text>
                     <View style={{ backgroundColor: 'lightgray', marginTop: 10, width: width }}>
                         <Text style={styles.titleText} > 业务信息</Text >
                     </View>
@@ -428,13 +495,21 @@ export default class mainView extends Component<Props> {
         //   this.props.navigation.navigate('UserLogin');
     }
     _onPressLogoutButton() {
-        local.remove("cookie");
-        local.remove("account");
-        local.remove("username");
-        local.remove("password");
-        local.remove("uid");
-        httpApi.logout();
-        this.props.navigation.navigate('Auth');
+        //    local.remove("cookie");
+        local.remove("account").then(() => {
+            return local.remove("username");
+        }).then(() => {
+            return local.remove("username");
+        }).then(() => {
+            return local.remove("password");
+        }).then(() => {
+            return local.remove("uid");
+        }).then(() => {
+            httpApi.logout();
+            this.props.navigation.navigate('Auth');
+        }).catch((value) => {
+            let a = value;
+        });
     }
     onChangeTab(tabName) {
         this.setState({

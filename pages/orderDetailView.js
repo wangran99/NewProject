@@ -10,7 +10,14 @@ import httpApi from '../tools/api'
 var Dimensions = require('Dimensions');
 var width = Dimensions.get('window').width;
 
-var dataTest = { "Table": [{ "id": 166, "facilitycode": "", "classift": "", "name": "衢州普润特科技有限公司", "address": "三衢路", "username": "", "contacts": "毛先生", "phone": "123321", "img": "", "ordertype": 0, "describe": "222", "doorplate": "", "message": 0, "cause": "222", "orderlevel": 0 }] };
+var dataTest = {
+    "Table": [{
+        "id": "", "facilitycode": "", "assetnumber": "", "name": "中国电信衢州分公司",
+        "address": "衢州西安路45", "doorplate": "", "classift": "", "brand": "", "model": "", "purchase": "", "upkeep": "",
+        "contacts": "", "orderid": 170, "ordertime": "2019/3/5 12:10:21", "phone": "33", "describe": "无",
+        "orderamount": 0.00, "orderstatus": 0, "ordertype": 1, "cause": "无", "orderlevel": 0
+    }]
+};
 type Props = {};
 export default class orderDetailView extends Component<Props> {
 
@@ -25,6 +32,7 @@ export default class orderDetailView extends Component<Props> {
             type: 'type',
             data: dataTest,
         };
+        this.orderId = 1;
     }
 
     componentDidMount() {
@@ -32,6 +40,7 @@ export default class orderDetailView extends Component<Props> {
         const id = navigation.getParam('id', '1');
 
         httpApi.getOrderDetails(id).then(data => {
+            this.orderId = data.Table[0].orderid;
             let type = '';
             if (data.Table[0].ordertype == 0)
                 type = "设备安装";
@@ -44,14 +53,15 @@ export default class orderDetailView extends Component<Props> {
             this.setState({ type, data });
         });
     }
+
+    cancelOrder() {
+        httpApi.cancelOrder()
+    }
     render() {
-
-
-
 
         return (
             <View style={styles.container}>
-                <View style={{marginHorizontal:10,marginTop:5,marginBottom:10, borderRadius:8 ,backgroundColor: 'white' }}>
+                <View style={{ marginHorizontal: 10, marginTop: 5, marginBottom: 10, borderRadius: 8, backgroundColor: 'white' }}>
                     <View style={{ marginVertical: 10, alignItems: 'center' }}>
                         <Text style={{ fontSize: 19, marginHorizontal: 5 }} numberOfLines={2}>
                             {this.state.type}
@@ -106,15 +116,30 @@ export default class orderDetailView extends Component<Props> {
                         <Text style={styles.textStyle}>故障图片：</Text>
                         <Image source={{ uri: ("http://www.glk119.com/UploadFile/images/" + this.state.data.Table[0].img) }} style={{ width: 60, height: 80 }} />
                     </View>
-                    <View style={[styles.textRowStyle, { flexDirection: 'row',marginBottom:10 }]} justifyContent='flex-end'>
+                    <View style={[styles.textRowStyle, { flexDirection: 'row', marginBottom: 10 }]} justifyContent='flex-end'>
                         <View style={{ marginHorizontal: 5 }}>
-                            <Button  type='outline' title="  返回  "></Button>
+                            <Button type='outline' title="  返回  " onPress={() => this.props.navigation.navigate("CancelOrder", { orderId: this.state.data.Table[0].orderid })}></Button>
                         </View>
                         <View style={{ marginHorizontal: 5 }}>
-                            <Button title="工单转派"></Button>
+                            <Button title="工单转派" onPress={() => { this.props.navigation.navigate("OrderTransfer", { orderId: this.state.data.Table[0].orderid }) }}></Button>
                         </View>
                         <View style={{ marginHorizontal: 5 }}>
-                            <Button  title="确认工单"></Button>
+                            <Button title="确认工单" onPress={() => {
+                                Alert.alert(
+                                    '客户名称' + this.state.data.Table[0].name,
+                                    '联系电话:' + this.state.data.Table[0].phone,
+                                    [
+                                        { text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                                        {
+                                            text: '确定', onPress: () => {
+                                                httpApi.confirmOrder(this.state.data.Table[0].orderid, 11, this.state.data.Table[0].phone)
+                                                    .then(data => this.props.navigation.goBack());
+                                            }
+                                        },
+                                    ],
+                                    { cancelable: false }
+                                );
+                            }}></Button>
                         </View>
                     </View>
                 </View>

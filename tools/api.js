@@ -35,10 +35,23 @@ class httpapi {
         return postData("/Order.asmx/ReceiveOrderQiang");
     }
 
-    static getOrderDetails(orderid){
-        return   postData("/Order.asmx/OrderDetails", { orderid });
+    static getOrderDetails(orderid) {
+        return postData("/Order.asmx/OrderDetails", { orderid });
+    }
+    static cancelOrder(orderid, cause) {
+        return postData("/Order.asmx/OrderCancel", { orderid, cause });
     }
 
+    static confirmOrder(orderid, kehuid, tel) {
+        return postData("/Order.asmx/OrderArrive", { orderid, kehuid, tel });
+    }
+    static transferOrder(orderid, toUid) {
+        return postData("/Order.asmx/OrderTransfer", { orderid, toUid });
+    }
+
+    static getUserList(keys) {
+        return postData("/commList.asmx/UserList", { keys });
+    }
     static saveLogin(params = {}) {
         saveData(params = {});
     }

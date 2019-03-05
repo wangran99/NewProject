@@ -18,7 +18,8 @@ var TestView = require('./pages/testView')
 var AuthView = require('./pages/authLoadingView')
 var NewsDetailView = require('./pages/newsDetailView')
 var OrderDetailView = require('./pages/orderDetailView')
-
+var CancelOrderView = require('./pages/cancelOrderView')
+var OrderTransferView = require('./pages/orderTransferView')
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -34,6 +35,8 @@ const AppStack = createStackNavigator(
     Main: MainView,
     NewsDetail: NewsDetailView,
     OrderDetail: OrderDetailView,
+    CancelOrder: CancelOrderView,
+    OrderTransfer: OrderTransferView,
     Test: TestView,
   },
   {

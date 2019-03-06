@@ -42,8 +42,8 @@ class httpapi {
         return postData("/Order.asmx/OrderCancel", { orderid, cause });
     }
 
-    static confirmOrder(orderid, kehuid, tel) {
-        return postData("/Order.asmx/OrderArrive", { orderid, kehuid, tel });
+    static confirmOrder(orderid, clientid, tel) {
+        return postData("/Order.asmx/OrderArrive", { orderid, clientid, tel });
     }
     static transferOrder(orderid, toUid) {
         return postData("/Order.asmx/OrderTransfer", { orderid, toUid });
@@ -52,6 +52,11 @@ class httpapi {
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }
+
+    static getClientList(keys) {
+        return postData("/commList.asmx/ClientList", { keys });
+    }
+
     static saveLogin(params = {}) {
         saveData(params = {});
     }

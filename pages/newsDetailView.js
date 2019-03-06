@@ -6,7 +6,7 @@ import { Button as AButton, Provider, Toast } from '@ant-design/react-native';
 // import HTMLView from 'react-native-htmlview';
 import MyWebView from 'react-native-webview-autoheight';
 //import AButton from '@ant-design/react-native/lib/button';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert, AsyncStorage } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, Image, View, Alert, DeviceEventEmitter } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import qs from 'qs'
 
@@ -54,6 +54,9 @@ export default class newsDetailView extends Component<Props> {
                 title, content, addTime
             });
         });
+    }
+    componentWillUnmount(){
+        DeviceEventEmitter.emit('announcementList',"jianting"); //发监听
     }
     render() {
         // var htmlContent = '<p><a href="">&hearts; nice job!</a></p>';

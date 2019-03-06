@@ -5,7 +5,7 @@ import { ListItem, SearchBar as ElementSearchBar } from 'react-native-elements';
 import { Carousel, Icon, SearchBar, TabBar, Grid, Button } from '@ant-design/react-native';
 import {
     FlatList, StyleSheet, Text, Keyboard, TouchableOpacity, Image, View, ScrollView,
-    Alert, AsyncStorage, ListView, RefreshControl
+    Alert, AsyncStorage, StatusBar, RefreshControl, DeviceEventEmitter
 } from 'react-native';
 import _ from 'lodash'
 import local from '../tools/storage'
@@ -122,6 +122,11 @@ export default class mainView extends Component<Props> {
     }
 
     componentDidMount() {
+        // this._navListener = this.props.navigation.addListener('didFocus', () => {
+        //     StatusBar.setBarStyle('light-content');
+        //     isAndroid && StatusBar.setBackgroundColor('#6a51ae');
+        //   });
+
         console.log("componentDidMount1111");
         // httpApi.getAnnouncement().then((data) => {
         //     Alert.alert('错误', JSON.stringify(data));
@@ -132,8 +137,19 @@ export default class mainView extends Component<Props> {
         });
         this.refreshgetAnnouncement("");
         this.getOrderList();
+        //收到监听
+        this.updateOderListlistener = DeviceEventEmitter.addListener('orderList', (e) => {
+            this.getOrderList();
+        });
+        this.updateAnnouncementListlistener = DeviceEventEmitter.addListener('announcementList', (e) => {
+            this.refreshgetAnnouncement("");
+        });
     }
-
+    componentWillUnmount() {
+        // 移除监听 
+        this.updateOderListlistener.remove();
+        this.updateAnnouncementListlistener.remove();
+    }
     _getAnnouncement(page, keys) {
         httpApi.getAnnouncement(page, keys).then((data) => {
             Alert.alert('错误', JSON.stringify(data));
@@ -216,7 +232,7 @@ export default class mainView extends Component<Props> {
                         value={this.state.searchContent} />
                 </View>
                 <TextInput ref={(input) => this.input = input}></TextInput> */}
-                <View style={{ backgroundColor: 'lightgray', marginTop: 8, width: width }}
+                <View style={{ backgroundColor: 'lightgray', marginTop: 0, width: width }}
                     onPress={this.clear.bind(this)}>
                     <Text style={styles.titleText} onPress={this.clear.bind(this)}> 公告列表</Text >
                 </View>
@@ -288,7 +304,7 @@ export default class mainView extends Component<Props> {
     }
     clear() {
         this.setState({ keys: '' });
-        console.warn("cancel antd");
+        // console.warn("cancel antd");
         this.refs.searchBar.inputRef.clear();
         this.refs.searchBar.inputRef.blur();
         Keyboard.dismiss
@@ -307,14 +323,18 @@ export default class mainView extends Component<Props> {
     }
 
     renderOrderView() {
+        //   Alert.alert("cuowu",JSON.stringify(this.state.orderList.Table.length));
+
         return (
-            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'lightgray' }}>
+            <View style={{ flex: 1, justifyContent: 'center', }}>
                 {/* <SearchBar placeholder="OrderView" showCancelButton /> */}
-                <View alignItems='center'>
-                    <Text style={{ margin: 2, fontSize: 20 }} alignSelf='center'>出门请核对物料</Text>
-                </View>
+                {this.state.orderList.Table && this.state.orderList.Table.length !== 0 ?
+                    <View alignItems='center'>
+                        <Text style={{ margin: 2, fontSize: 20 }} alignSelf='center'>出门请核对物料</Text>
+                    </View> : null
+                }
                 <FlatList
-                    style={{ marginTop: 2 }}
+                    style={{ marginTop: 0 }}
                     refreshing={this.state.isRefreshing}
                     onRefresh={this.getOrderList.bind(this)}
                     // onEndReached={this.fetchMoreAnnouncement.bind(this)}
@@ -345,7 +365,7 @@ export default class mainView extends Component<Props> {
                     }}
                     ListFooterComponent={() => {
                         return (
-                            this.state.announcement.Table.length !== 0 ?
+                            this.state.orderList.Table && this.state.orderList.Table.length !== 0 ?
                                 <View style={{ marginTop: 30, marginBottom: 25 }}>
                                     <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
                                     <Text style={{ alignSelf: 'center', marginTop: 20 }}>没有数据了</Text>
@@ -374,14 +394,12 @@ export default class mainView extends Component<Props> {
     }
 
     renderWorkView() {
-        let slideImageWidth = 180;
+        let slideImageHight = 190;
         return (<ScrollView>
             <View style={{
                 flex: 1, // alignItems: 'center',
                 //  backgroundColor: 'black'
             }}>
-                {/* <SearchBar placeholder="WorkView11" showCancelButton /> */}
-
                 <Carousel
                     style={{ marginTop: 0 }}
                     selectedIndex={2}
@@ -390,9 +408,9 @@ export default class mainView extends Component<Props> {
                     autoplayInterval={3000}
                 //    afterChange={this.onHorizontalSelectedIndexChange}
                 >
-                    <Image style={{ width: width, height: slideImageWidth }} source={require('../img/slide0.png')} resizeMode='cover'></Image>
-                    <Image style={{ width: width, height: slideImageWidth }} source={require('../img/slide1.png')} resizeMode='contain'></Image>
-                    <Image style={{ width: width, height: slideImageWidth }} source={require('../img/slide2.png')} resizeMode='stretch'></Image>
+                    <Image style={{ width: width, height: slideImageHight }} source={require('../img/slide0.png')} resizeMode='cover'></Image>
+                    <Image style={{ width: width, height: slideImageHight }} source={require('../img/slide1.png')} resizeMode='contain'></Image>
+                    <Image style={{ width: width, height: slideImageHight }} source={require('../img/slide2.png')} resizeMode='stretch'></Image>
 
                 </Carousel>
 
@@ -401,16 +419,32 @@ export default class mainView extends Component<Props> {
                     <Grid
                         data={data}
                         columnNum={4}
+                        itemStyle={{ fontSize: 30, backgroundColor: 'red' }}
+                        styles={[styles.text]}
+                        // renderItem={(el, index) => {
+                        //     let a = el.icon.props.name;
+                        //     console.warn("icon:"+a);
+                        //     let b=1;
+                        //     return <View style={{flex:1, justifyContent:'center',alignItems:'center', backgroundColor: "red" }} >
+                        //             <Icon  name={a} size="lg"></Icon>
+                        //             <Text style={{fontSize:16}}>{el.text}</Text>
+                        //     </View>
+                        // }}
+
                     //  isCarousel
                     //  onPress={(_el: any, index: any) => alert(index)}
                     />
                     <View style={[{ margin: 10 }]}>
-                        <Text>Custom GridCell Style</Text>
+                        <Text ref="mytext">Custom GridCell Style</Text>
                     </View>
                     <Grid
+                    itemStyle={{ fontSize: 40, backgroundColor: 'blue' }}
+                    styles={[styles.text,{margin:23}]}
+                        ref="grid"
                         data={data}
                         columnNum={3}
-                        itemStyle={{ text: "34333", height: 150, backgroundColor: '#ffff00' }}
+                        itemStyle={{ fontSize: 40, height: 50, backgroundColor: 'blue' }}
+                        // renderItem={(el, index) => { return <View style={{ width: 50, height: 80, backgroundColor: "red" }} /> }}
                     />
                 </View>
             </View>
@@ -651,6 +685,10 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 25,
         marginLeft: 10,
+    },
+
+    text: {
+       fontSize:53
     },
 });
 module.exports = mainView;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, ToastAndroid } from 'react-native';
+import { Alert, ToastAndroid ,StatusBar } from 'react-native';
 import axios from 'axios'
 import qs from 'qs'
 
@@ -30,16 +30,17 @@ var instance = axios.create({
     timeout: 5000,
     headers: {
         //    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-        'Accept': 'application/json',
+        // 'Accept': 'application/json',
         // 'X-Custom-Header': 'foobar',
         // 'Cookie': cookie,
-        'Accept-Encoding': 'gzip, deflate',
-        'Connection': 'keep-alive',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Cache-Control': 'max-age=0',
-        'Host': 'www.glk119.com',
+        // 'Accept-Encoding': 'gzip, deflate',
+        // 'Connection': 'keep-alive',
+        // 'X-Requested-With': 'XMLHttpRequest',
+        // 'Cache-Control': 'max-age=0',
+        'Cache-Control': 'no-cache',
+        // 'Host': 'www.glk119.com',
         //  'Referer': 'http://www.glk119.com/login0.aspx',
-        'Upgrade-Insecure-Requests': '1',
+        // 'Upgrade-Insecure-Requests': '1',
         //    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36'
     },
 });
@@ -205,10 +206,11 @@ export function postData(url, params = {}) {
                 return instance.post(url, pp);
 
             }).then((response) => {
-                console.warn("response:" + JSON.stringify(response));
+                // console.warn("response:" + JSON.stringify(response));
                 resolve(response.data);
             }).catch(e => {
                 console.warn("my error:" + JSON.stringify(e));
+                Alert.alert('错误', JSON.stringify(e));
                 reject(e);
             });
         })
@@ -220,6 +222,7 @@ export function postData(url, params = {}) {
                 resolve(response.data);
             }).catch(e => {
                 console.warn("post2 error:" + JSON.stringify(e));
+                Alert.alert('错误', JSON.stringify(e));
                 reject(e);
             });
         });

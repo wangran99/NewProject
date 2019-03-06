@@ -12,9 +12,9 @@ class authLoadingView extends React.Component {
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
         const account = await AsyncStorage.getItem('account');
-        console.warn("11 account:"+account)
+     //   console.warn("11 account:"+account)
         const userName = await AsyncStorage.getItem('username');
-        console.warn("11 userName:"+userName)
+    //    console.warn("11 userName:"+userName)
         const password = await AsyncStorage.getItem('password');
         const uid = await AsyncStorage.getItem('uid');
 

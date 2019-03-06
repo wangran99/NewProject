@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, DeviceEventEmitter, View, Alert } from 'react-native';
 
 import local from '../tools/storage'
 import httpApi from '../tools/api'
@@ -29,7 +29,9 @@ export default class cancelOrderView extends Component<Props> {
         const orderId = navigation.getParam('orderId', 1);
         httpApi.cancelOrder(orderId, this.state.value)
             .then((data) => {
-                navigation.goBack();
+                DeviceEventEmitter.emit('orderList',"jianting"); //发监听
+                navigation.popToTop(); 
+              
             });
         //   this.props.navigation.navigate('UserLogin');
     }
@@ -37,11 +39,13 @@ export default class cancelOrderView extends Component<Props> {
 
         return (
             <View style={styles.container}>
-                <Text style={{ fontSize: 18, marginVertical: 5 }}>说明原因</Text>
+                <Text style={{ fontSize: 18, marginVertical: 5, marginHorizontal: 5 }}>说明原因</Text>
                 <TextInput style={{ height: 140, fontSize: 17, backgroundColor: "white" }}
                     onChangeText={(value) => this.setState({ value })}
                     multiline={true} placeholder={'请输入取消原因'}></TextInput>
-                <Button style={{ marginHorizontal: 20 }} title="提交" onPress={this._onPressButton.bind(this)}></Button>
+                <View style={{ marginHorizontal: 5,marginVertical:10 }}>
+                    <Button  title="提交" onPress={this._onPressButton.bind(this)}></Button>
+                </View>
             </View>
         );
     }

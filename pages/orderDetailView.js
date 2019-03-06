@@ -2,14 +2,17 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
+import { Modal, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, Image, View, Alert } from 'react-native';
+import { Provider } from '@ant-design/react-native';
+import { Dropdown } from 'react-native-material-dropdown';
+
 
 import local from '../tools/storage'
 import httpApi from '../tools/api'
 
 var Dimensions = require('Dimensions');
-var width = Dimensions.get('window').width;
-
+var screenWidth = Dimensions.get('window').width;
+var dialogWidth = screenWidth - 80;
 var dataTest = {
     "Table": [{
         "id": "", "facilitycode": "", "assetnumber": "", "name": "中国电信衢州分公司",
@@ -31,8 +34,13 @@ export default class orderDetailView extends Component<Props> {
         this.state = {
             type: 'type',
             data: dataTest,
+            clientArray: [],
+            clientTel: '',
+            visible: false,
+            // selectedClientIndex:-1,
         };
-        this.orderId = 1;
+        this.orderId = -1;
+        this.clientId = -1;
     }
 
     componentDidMount() {
@@ -50,12 +58,38 @@ export default class orderDetailView extends Component<Props> {
                 type = "送货";
             else if (data.Table[0].ordertype == 3)
                 type = "设备临修";
-            this.setState({ type, data });
+            this.setState({ type, data, clientTel: data.Table[0].phone });
+        });
+        // 获取客户列表
+        httpApi.getClientList('').then((data) => {
+            let index=0;
+            var arr = new Array();
+            data.Table.map((item) => {
+                arr.push({ value: item.name, id: item.id })
+               
+            });
+
+            this.setState({ clientArray: arr });
         });
     }
 
-    cancelOrder() {
-        httpApi.cancelOrder()
+    setModalVisible(visible) {
+        this.setState({ visible: visible });
+    }
+    onClose() {
+        this.setState({ visible: false });
+    }
+    _confirmOrder() {
+        this.setModalVisible(false);
+        let a = 1;
+
+        httpApi.confirmOrder(this.orderId, this.clientId, this.state.clientTel)
+            .then(data => {
+                if (data.Table[0].Column1 == 1000)
+                    this.props.navigation.goBack()
+                else
+                    Alert.alert('错误', data.Table[0].Column2);
+            });
     }
     render() {
 
@@ -124,23 +158,70 @@ export default class orderDetailView extends Component<Props> {
                             <Button title="工单转派" onPress={() => { this.props.navigation.navigate("OrderTransfer", { orderId: this.state.data.Table[0].orderid }) }}></Button>
                         </View>
                         <View style={{ marginHorizontal: 5 }}>
-                            <Button title="确认工单" onPress={() => {
-                                Alert.alert(
-                                    '客户名称' + this.state.data.Table[0].name,
-                                    '联系电话:' + this.state.data.Table[0].phone,
-                                    [
-                                        { text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                        {
-                                            text: '确定', onPress: () => {
-                                                httpApi.confirmOrder(this.state.data.Table[0].orderid, 11, this.state.data.Table[0].phone)
-                                                    .then(data => this.props.navigation.goBack());
-                                            }
-                                        },
-                                    ],
-                                    { cancelable: false }
-                                );
-                            }}></Button>
+                            <Button title="确认工单" onPress={() => this.setModalVisible(true)}></Button>
                         </View>
+                        <Modal
+                            animationType={"slide"}
+                            transparent={true}
+                            visible={this.state.visible}
+                            onRequestClose={() => { this.setModalVisible(false) }}
+                        >
+                            <TouchableOpacity style={{ flex: 1 }} onPress={this.onClose.bind(this)}>
+                                <View style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    padding: 40,
+                                    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                                }}>
+                                    <View style={{
+                                        borderRadius: 12,
+                                        alignItems: 'center',
+                                        backgroundColor: '#fff',
+                                        padding: 20
+                                    }}>
+                                        <Text style={{ fontSize: 18 }}>确认工单</Text>
+                                        <View style={{ width: dialogWidth - 20, }}>
+                                            <Dropdown
+                                                label=' 客户列表'
+                                                data={this.state.clientArray}
+                                                onChangeText={(value, index, data) => {
+                                                    this.clientId = data[index].id;
+                                                }}
+                                            />
+                                        </View>
+
+                                        <TextInput
+                                            style={{
+                                                width: dialogWidth - 20,
+                                                marginTop: 10,
+                                            }}
+                                            onChangeText={(clientTel) => this.setState({ clientTel })}
+                                            placeholder="请输入客户电话"
+                                            keyboardType="numeric"
+                                        />
+                                        <View style={{
+                                            width: dialogWidth - 20,
+                                            borderTopWidth: 1,
+                                            borderTopColor: 'lightgray',
+                                            alignItems: 'center'
+                                        }}>
+                                            <View flexDirection='row'>
+                                                <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} onPress={() => {
+                                                    this.setModalVisible(!this.state.modalVisible)
+                                                }}>
+                                                    <Text style={{ fontSize: 17, marginTop: 10 }} onPress={() => {
+                                                    }}>取消</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                                                    onPress={this._confirmOrder.bind(this)}>
+                                                    <Text style={{ fontSize: 17, marginTop: 10 }} >确认</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        </Modal>
                     </View>
                 </View>
 

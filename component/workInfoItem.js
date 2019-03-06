@@ -16,7 +16,7 @@ export default class workInfoItem extends Component {
           <Text style={{ fontSize: 20, color: '#5588EE' }}>
             {number}
         </Text>
-          <Text style={{ fontSize: 17, color: '#999999' }}>
+          <Text style={{ fontSize: 17, }}>
             {title}
           </Text>
         </View>

@@ -26,49 +26,46 @@ const data1 = Array.from(new Array(15)).map((_val, i) => ({
     text: `Name${i}`,
 }));
 const data = [{
-    icon: (<Icon name='ordered-list' size='lg' />),
-    text: `公告`,
-}, {
-    icon: (<Icon name='alert' size='lg' />),
+    name: 'alert',
     text: `指派单`,
 }, {
-    icon: 'http://www.glk119.com/UploadFile/images/15159C480396D49FA6793C2B7C363843.png',
+    name: 'http://www.glk119.com/UploadFile/images/15159C480396D49FA6793C2B7C363843.png',
     text: `单据管理`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `车辆管理`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `租机抄表`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `添加设备`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `工程管理`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `维修经验`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `备忘录`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `维修工单`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `送货工单`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `安装工单`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `业务员派单`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `技术资料`,
 }, {
-    icon: (<Icon name='alipay-circle' size='lg' />),
+    name: 'alipay-circle',
     text: `业务公开`,
 }];
 
@@ -386,6 +383,7 @@ export default class mainView extends Component<Props> {
     }
 
     getOrderList() {
+        let a = 1;
         httpApi.getOrderQiang().then((data) => {
             this.setState({
                 orderList: data
@@ -419,32 +417,15 @@ export default class mainView extends Component<Props> {
                     <Grid
                         data={data}
                         columnNum={4}
-                        itemStyle={{ fontSize: 30, backgroundColor: 'red' }}
+                        itemStyle={{ fontSize: 10, }}
                         styles={[styles.text]}
-                        // renderItem={(el, index) => {
-                        //     let a = el.icon.props.name;
-                        //     console.warn("icon:"+a);
-                        //     let b=1;
-                        //     return <View style={{flex:1, justifyContent:'center',alignItems:'center', backgroundColor: "red" }} >
-                        //             <Icon  name={a} size="lg"></Icon>
-                        //             <Text style={{fontSize:16}}>{el.text}</Text>
-                        //     </View>
-                        // }}
-
-                    //  isCarousel
-                    //  onPress={(_el: any, index: any) => alert(index)}
-                    />
-                    <View style={[{ margin: 10 }]}>
-                        <Text ref="mytext">Custom GridCell Style</Text>
-                    </View>
-                    <Grid
-                    itemStyle={{ fontSize: 40, backgroundColor: 'blue' }}
-                    styles={[styles.text,{margin:23}]}
-                        ref="grid"
-                        data={data}
-                        columnNum={3}
-                        itemStyle={{ fontSize: 40, height: 50, backgroundColor: 'blue' }}
-                        // renderItem={(el, index) => { return <View style={{ width: 50, height: 80, backgroundColor: "red" }} /> }}
+                        renderItem={(el, index) => {
+                            return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }} >
+                                <Icon name={el.name} size="lg"></Icon>
+                                <Text style={{ fontSize: 16 }}>{el.text}</Text>
+                            </View>
+                        }}
+                        onPress={(el, index) => this._onPressWorkGridItem(index)}
                     />
                 </View>
             </View>
@@ -452,6 +433,12 @@ export default class mainView extends Component<Props> {
         );
     }
 
+    _onPressWorkGridItem(index) {
+        if (index == 0)
+            this.props.navigation.navigate("OrderPai");
+        else if (index == 1)
+            this.props.navigation.navigate("DanjuList");
+    }
     renderMyView() {
         const list = [
             {
@@ -688,7 +675,7 @@ const styles = StyleSheet.create({
     },
 
     text: {
-       fontSize:53
+        fontSize: 53
     },
 });
 module.exports = mainView;

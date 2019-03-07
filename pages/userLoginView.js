@@ -29,18 +29,18 @@ export default class userLoginView extends Component<Props> {
         //     console.log("get code:"+ code);
         // });
         //    httpApi.personLogin(this.state.userName, this.state.password)
-        httpApi.personLogin('cs', 'xl', '123456')
+        httpApi.personLogin('cs', 'yhj', '123456')
             .then((data) => {
                 let code = data.code;
                 if (code == 1000) {
-                    local.set("username", "xl");
+                    local.set("username", "yhj");
                     local.set("password", "123456");
                     local.set("uid", data.uId);
                     httpApi.saveLogin({
                         account: 'cs',
-                        username: 'xl',
+                        username: 'yhj',
                         password: '123456',
-                        uid: 18
+                        uid: 15
                     });
                     this.props.navigation.navigate('Main');
                 }

@@ -30,7 +30,8 @@ export default class cancelOrderView extends Component<Props> {
         httpApi.cancelOrder(orderId, this.state.value)
             .then((data) => {
                 DeviceEventEmitter.emit('orderList',"jianting"); //发监听
-                navigation.popToTop(); 
+                DeviceEventEmitter.emit('orderPaiList',"jianting"); //发监听
+                navigation.pop(2); 
               
             });
         //   this.props.navigation.navigate('UserLogin');

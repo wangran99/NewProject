@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, Image, View, DeviceEventEmitter } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Dropdown } from 'react-native-material-dropdown';
 
@@ -47,7 +47,9 @@ export default class orderTransferView extends Component<Props> {
 
         httpApi.transferOrder(this.orderId, this.toUid)
             .then((data) => {
-                this.props.navigation.goBack();
+                DeviceEventEmitter.emit('orderList',"jianting"); //发监听
+                DeviceEventEmitter.emit('orderPaiList',"jianting"); //发监听
+                this.props.navigation.pop(2);
             });
         //   this.props.navigation.navigate('UserLogin');
     }
@@ -62,7 +64,7 @@ export default class orderTransferView extends Component<Props> {
         return (
             <View style={styles.container}>
                 <View flexDirection='row' alignItems='center'>
-                    <Text style={{ fontSize: 18, marginVertical: 5 }}>请选择技术员:</Text>
+                    <Text style={{ fontSize: 18,marginHorizontal:10, marginVertical: 5 }}>请选择技术员:</Text>
                     <View style={{ flex: 1 }}>
                         {/* <ModalDropdown textStyle={{ fontSize: 18 }} dropdownStyle={{ fontSize: 27 }}
                             renderRow={(option, index, isSelected) => {

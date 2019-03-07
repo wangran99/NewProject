@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Modal, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, Image, View, Alert } from 'react-native';
+import { Modal, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, Image, View, Alert, DeviceEventEmitter } from 'react-native';
 import { Provider } from '@ant-design/react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
@@ -37,7 +37,7 @@ export default class orderDetailView extends Component<Props> {
             clientArray: [],
             clientTel: '',
             visible: false,
-            // selectedClientIndex:-1,
+            selectedClientName: "",
         };
         this.orderId = -1;
         this.clientId = -1;
@@ -49,6 +49,7 @@ export default class orderDetailView extends Component<Props> {
 
         httpApi.getOrderDetails(id).then(data => {
             this.orderId = data.Table[0].orderid;
+            this.clientId = data.Table[0].clientid;
             let type = '';
             if (data.Table[0].ordertype == 0)
                 type = "设备安装";
@@ -58,18 +59,16 @@ export default class orderDetailView extends Component<Props> {
                 type = "送货";
             else if (data.Table[0].ordertype == 3)
                 type = "设备临修";
-            this.setState({ type, data, clientTel: data.Table[0].phone });
-        });
-        // 获取客户列表
-        httpApi.getClientList('').then((data) => {
-            let index=0;
+            this.setState({ type, data, clientTel: data.Table[0].phone, selectedClientName: data.Table[0].name });
+            // 获取客户列表
+            return httpApi.getClientList('');
+        }).then((data) => {
             var arr = new Array();
             data.Table.map((item) => {
                 arr.push({ value: item.name, id: item.id })
-               
             });
 
-            this.setState({ clientArray: arr });
+            this.setState({ clientArray: arr, });
         });
     }
 
@@ -85,8 +84,11 @@ export default class orderDetailView extends Component<Props> {
 
         httpApi.confirmOrder(this.orderId, this.clientId, this.state.clientTel)
             .then(data => {
-                if (data.Table[0].Column1 == 1000)
-                    this.props.navigation.goBack()
+                if (data.Table[0].Column1 == 1000) {
+                    DeviceEventEmitter.emit('orderList', "jianting"); //发监听
+                    DeviceEventEmitter.emit('orderPaiList', "jianting"); //发监听
+                    this.props.navigation.goBack();
+                }
                 else
                     Alert.alert('错误', data.Table[0].Column2);
             });
@@ -152,7 +154,7 @@ export default class orderDetailView extends Component<Props> {
                     </View>
                     <View style={[styles.textRowStyle, { flexDirection: 'row', marginBottom: 10 }]} justifyContent='flex-end'>
                         <View style={{ marginHorizontal: 5 }}>
-                            <Button type='outline' title="  返回  " onPress={() => this.props.navigation.navigate("CancelOrder", { orderId: this.state.data.Table[0].orderid })}></Button>
+                            <Button type='outline' title="  取消  " onPress={() => this.props.navigation.navigate("CancelOrder", { orderId: this.state.data.Table[0].orderid })}></Button>
                         </View>
                         <View style={{ marginHorizontal: 5 }}>
                             <Button title="工单转派" onPress={() => { this.props.navigation.navigate("OrderTransfer", { orderId: this.state.data.Table[0].orderid }) }}></Button>
@@ -183,6 +185,7 @@ export default class orderDetailView extends Component<Props> {
                                         <View style={{ width: dialogWidth - 20, }}>
                                             <Dropdown
                                                 label=' 客户列表'
+                                                value={this.state.selectedClientName}
                                                 data={this.state.clientArray}
                                                 onChangeText={(value, index, data) => {
                                                     this.clientId = data[index].id;
@@ -195,6 +198,8 @@ export default class orderDetailView extends Component<Props> {
                                                 width: dialogWidth - 20,
                                                 marginTop: 10,
                                             }}
+                                            value={this.state.data.Table[0].phone}
+                                            value={this.state.clientTel}
                                             onChangeText={(clientTel) => this.setState({ clientTel })}
                                             placeholder="请输入客户电话"
                                             keyboardType="numeric"

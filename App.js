@@ -20,6 +20,9 @@ var NewsDetailView = require('./pages/newsDetailView')
 var OrderDetailView = require('./pages/orderDetailView')
 var CancelOrderView = require('./pages/cancelOrderView')
 var OrderTransferView = require('./pages/orderTransferView')
+var OrderPaiView = require('./pages/orderPaiView')
+var DanjuListView = require('./pages/danjuListView')
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -37,6 +40,8 @@ const AppStack = createStackNavigator(
     OrderDetail: OrderDetailView,
     CancelOrder: CancelOrderView,
     OrderTransfer: OrderTransferView,
+    OrderPai: OrderPaiView,
+    DanjuList:DanjuListView,
     Test: TestView,
   },
   {

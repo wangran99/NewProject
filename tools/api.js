@@ -35,6 +35,11 @@ class httpapi {
         return postData("/Order.asmx/ReceiveOrderQiang");
     }
 
+    // 派单列表
+    static getOrderPai() {
+        return postData("/Order.asmx/ReceiveOrderPai");
+    }
+
     static getOrderDetails(orderid) {
         return postData("/Order.asmx/OrderDetails", { orderid });
     }
@@ -47,6 +52,14 @@ class httpapi {
     }
     static transferOrder(orderid, toUid) {
         return postData("/Order.asmx/OrderTransfer", { orderid, toUid });
+    }
+
+    static getDanJuList() {
+        return postData("/Order.asmx/OrderDanJu");
+    }
+
+    static danJuYiJiao(did, type) {
+        return postData("/Order.asmx/OrderDanJuYiJiao", { did, type });
     }
 
     static getUserList(keys) {

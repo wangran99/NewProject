@@ -61,6 +61,24 @@ class httpapi {
     static danJuYiJiao(did, type) {
         return postData("/Order.asmx/OrderDanJuYiJiao", { did, type });
     }
+    // 获取租机抄表列表
+    static getRentList(count, keys) {
+        return postData("/Rent.asmx/RentList", { count, keys });
+    }
+    // 获取租机详细信息
+    static getRentDetail(rentid) {
+        return postData("/Rent.asmx/RentDetails", { rentid });
+    }
+
+    // 获取租机最近10次的读取数据
+    static getRentReadingTop10(equipid) {
+        return postData("/Rent.asmx/RentReadingTop10", { equipid });
+    }
+
+    //  最后抄表记录详情
+    static getRentLast(equipid) {
+        return postData("/Rent.asmx/RentLast", { equipid });
+    }
 
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });

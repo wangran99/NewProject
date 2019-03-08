@@ -36,25 +36,7 @@ export default class DanjuListView extends Component<Props> {
             visible: false,
         }
     }
-    _onPressButton() {
-        // Alert.alert('You tapped the button!'+local.get("code"));
-        // local.get('code').then((code) => {
-        //     console.log("get code:"+ code);
-        // });
-        //    httpApi.personLogin(this.state.userName, this.state.password)
-        httpApi.personLogin('yhj', '123456')
-            .then((response) => {
-                let code = response.data['data0'];
-                if (code == 1000) {
-                    let cookie = response.headers["Cookie"];
-                    local.set("cookie", cookie);
-                    this.props.navigation.navigate('Main');
-                }
-                else
-                    Alert.alert('错误', JSON.stringify(data));
-            });
-        //   this.props.navigation.navigate('UserLogin');
-    }
+
     componentDidMount() {
         this._getDanJuList();
     }
@@ -120,7 +102,7 @@ export default class DanjuListView extends Component<Props> {
                                             let a = item;
                                             httpApi.danJuYiJiao(item.tid, item.class).then((data) => {
                                                 if (data.Table[0].Column1 == 1000)
-                                                    this.props.navigation.goBack();
+                                                    this._getDanJuList();
                                                 else
                                                     alert(data.Table[0].Column2);
                                             });

@@ -49,7 +49,11 @@ export default class rentDetailView extends Component<Props> {
     }
     _onPressButton() {
 
-        this.props.navigation.navigate('RentingMeterReading', { "equipmentid": 22 });
+        this.props.navigation.navigate('RentingMeterReading',
+            {
+                "equipmentid": this.state.data.Table[0].equipmentid,
+                "contractno": this.state.data.Table[0].contractno
+            });
     }
 
     componentDidMount() {

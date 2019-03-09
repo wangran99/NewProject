@@ -1,4 +1,4 @@
-import { instance, getData, getHeader, post, postData, resetData, saveData, loginPost } from './http.js'
+import { instance, getData, getHeader, uploadPic, post, postData, resetData, saveData, loginPost } from './http.js'
 
 
 class httpapi {
@@ -80,6 +80,35 @@ class httpapi {
         return postData("/Rent.asmx/RentLast", { equipid });
     }
 
+
+    /**
+     *发送保养抄表记录
+     *
+     * @static
+     * @param {*} did 定单编号，即contractno
+     * @param {*} reading 黑色读数
+     * @param {*} readingex 彩色读数
+     * @param {*} whether 是否完成保养
+     * @param {*} equipid 设备编号
+     * @param {*} reada3 黑色A3读数
+     * @param {*} readexa3 彩色A3读数
+     * @param {*} scan 扫描读数
+     * @param {*} cycle 抄表月数
+     * @param {*} img 图片id
+     * @param {*} remark 备注
+     * @returns
+     * @memberof httpapi
+     */
+    static RentMeterReading(did, reading, readingex, whether, equipid, reada3, readexa3, scan, cycle, img, remark) {
+        return postData("/Rent.asmx/RentMeterReading", { did, reading, readingex, whether, equipid, reada3, readexa3, scan, cycle, img, remark });
+    }
+    static uploadPic(base64str) {
+        return uploadPic({ base64str });
+    }
+    //count实际为页数
+    static getEquipmentList(count = 1, name = '') {
+        return postData("/commList.asmx/EquipmentList", { count, name });
+    }
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

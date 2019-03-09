@@ -229,6 +229,52 @@ export function postData(url, params = {}) {
     }
 
 }
+
+
+export function uploadPic( params = {}) {
+    url ='http://ys2.glk119.com/webservice/Base64ImgUpload.asmx/Base64StringToImage';
+    if (!uid) {
+        return new Promise((resolve, reject) => {
+            local.get("account").then((value) => {
+                account = value;
+                return local.get("username");
+            }).then((value) => {
+                username = value;
+                return local.get("password");
+            }).then((value) => {
+                password = value;
+                return local.get("uid");
+            }).then((value) => {
+                uid = value;
+                let data = extend({ account, username, password, uid }, params);
+
+                let pp = qs.stringify(data);
+                return instance.post(url, pp);
+
+            }).then((response) => {
+                // console.warn("response:" + JSON.stringify(response));
+                resolve(response.data);
+            }).catch(e => {
+                console.warn("my error:" + JSON.stringify(e));
+                Alert.alert('错误', JSON.stringify(e));
+                reject(e);
+            });
+        })
+    } else {
+        let data = extend({ account, username, password, uid }, params);
+        let pp = qs.stringify(data);
+        return new Promise((resolve, reject) => {
+            instance.post(url, pp).then(response => {
+                resolve(response.data);
+            }).catch(e => {
+                console.warn("post2 error:" + JSON.stringify(e));
+                Alert.alert('错误', JSON.stringify(e));
+                reject(e);
+            });
+        });
+    }
+
+}
 //登录专用
 export function loginPost(url, params = {}) {
     let pp = qs.stringify(params);

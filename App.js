@@ -25,6 +25,8 @@ var DanjuListView = require('./pages/danjuListView')
 var RentListView = require('./pages/rentListView')
 var RentDetailView = require('./pages/rentDetailView')
 var RentingMeterReadingView = require('./pages/rentingMeterReadingView')
+var EquipmentListView = require('./pages/equipmentListView')
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -43,10 +45,11 @@ const AppStack = createStackNavigator(
     CancelOrder: CancelOrderView,
     OrderTransfer: OrderTransferView,
     OrderPai: OrderPaiView,
-    DanjuList:DanjuListView,
-    RentList:RentListView,
-    RentDetail:RentDetailView,
-    RentingMeterReading:RentingMeterReadingView,
+    DanjuList: DanjuListView,
+    RentList: RentListView,
+    RentDetail: RentDetailView,
+    RentingMeterReading: RentingMeterReadingView,
+    EquipmentList: EquipmentListView,
     Test: TestView,
   },
   {

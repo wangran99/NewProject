@@ -56,7 +56,7 @@ export default class rentListView extends Component<Props> {
         return (
             <View style={{ flex: 1, backgroundColor: 'lightgray' }}>
                 <TouchableOpacity backgroundColor='red' activeOpacity={1.0} >
-                    <SearchBar placeholder="请输入搜索内容"
+                    <SearchBar placeholder="请输入客户或设备编码"
                         ref="searchBar"
                         // inputRef={(searinput) => this.searinput = searinput}
                         onChange={(value) => {
@@ -82,7 +82,7 @@ export default class rentListView extends Component<Props> {
                                 style={{ flex: 1 }}
                                 onPress={() => this._getRentList()}
                                 activeOpacity={0.3}>
-                                <View style={{ flex: 1, height: height-65, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', marginTop: 5, marginBottom: 20 }}>
+                                <View style={{ flex: 1, height: height-65, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', marginTop: 1, marginBottom: 20 }}>
                                     {/* <View style={{ flex: 1, backgroundColor: 'lightgray' }}></View> */}
                                     <Image style={{
                                         width: 80,
@@ -101,7 +101,7 @@ export default class rentListView extends Component<Props> {
                     ListFooterComponent={() => {
                         return (
                             this.state.rentList.Table && this.state.rentList.Table.length !== 0 ?
-                                <View style={{ marginTop: 30, marginBottom: 25 }}>
+                                <View style={{ marginTop: 25, marginBottom: 25 }}>
                                     <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
                                     <Text style={{ alignSelf: 'center', marginTop: 20 }}>没有数据了</Text>
                                 </View> : null

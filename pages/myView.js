@@ -22,7 +22,14 @@ export default class myView extends Component<Props> {
     //         title: navigation.getParam('otherParam', 'A Nested Details Screen'),
     //     };
     // };
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '', //搜索关键词
+            isRefreshing: false,
+            equipmentList: equipmentListTest,
+        };
+    }
     _onPressButton() {
         // Alert.alert('You tapped the button!'+local.get("code"));
         // local.get('code').then((code) => {

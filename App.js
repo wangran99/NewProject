@@ -26,6 +26,8 @@ var RentListView = require('./pages/rentListView')
 var RentDetailView = require('./pages/rentDetailView')
 var RentingMeterReadingView = require('./pages/rentingMeterReadingView')
 var EquipmentListView = require('./pages/equipmentListView')
+var BarCodeCameraView = require('./pages/barCodeCameraView')
+var AddNewEquipmentView = require('./pages/addNewEquipmentView')
 
 
 const instructions = Platform.select({
@@ -50,6 +52,8 @@ const AppStack = createStackNavigator(
     RentDetail: RentDetailView,
     RentingMeterReading: RentingMeterReadingView,
     EquipmentList: EquipmentListView,
+    BarCodeCamera: BarCodeCameraView,
+    AddNewEquipment:AddNewEquipmentView,
     Test: TestView,
   },
   {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 //import { Button } from 'react-native-elements';
 import { List, InputItem, Button, WingBlank, Carousel } from '@ant-design/react-native';
 import { ActivityIndicator, StyleSheet, Text, TextInput, StatusBar,Image, View, Alert, AsyncStorage } from 'react-native';
+import SplashScreen from 'react-native-splash-screen'
 
 class authLoadingView extends React.Component {
     constructor() {
@@ -26,6 +27,10 @@ class authLoadingView extends React.Component {
             this.props.navigation.navigate('Auth');
     };
 
+    componentDidMount(){
+        //3秒后关闭启动页
+        setTimeout(()=>{SplashScreen.hide()}, 1500, )
+    }
     // Render any loading content that you like here
     render() {
         return (

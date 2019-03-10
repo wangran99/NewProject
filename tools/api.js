@@ -109,6 +109,16 @@ class httpapi {
     static getEquipmentList(count = 1, name = '') {
         return postData("/commList.asmx/EquipmentList", { count, name });
     }
+
+    //根据条码code获取设备信息
+    static getEquipmentDetailsByCode(code) {
+        return postData("/commList.asmx/EquipmentDetailsByCode", { code });
+    }
+
+    //增加新设备
+    static addEquipment(facilitycode, cid, classift, brand, model, doorplate, purchase, assetnumber, remark) {
+        return postData("/commList.asmx/EquipmentAdd", { facilitycode, cid, classift, brand, model, doorplate, purchase, assetnumber, remark });
+    }
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

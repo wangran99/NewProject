@@ -2,8 +2,14 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { FlatList, StyleSheet, Text, TouchableOpacity, Image, View, Alert, Keyboard } from 'react-native';
+import {
+    FlatList, StyleSheet, Text, Animated,
+    Easing, InteractionManager, TouchableOpacity, Image, View, Alert, Keyboard
+} from 'react-native';
 import { Carousel, Icon, SearchBar, } from '@ant-design/react-native';
+import ImagePicker from 'react-native-image-picker'; //第三方相机
+import { RNCamera } from 'react-native-camera'
+
 
 import local from '../tools/storage'
 import httpApi from '../tools/api'
@@ -18,42 +24,38 @@ var equipmentListTest = { "Table": [], "Table1": [{ "counts": 0, "pagecounts": 0
 type Props = {};
 export default class equipmentListView extends Component<Props> {
 
-    static navigationOptions = {
-        title: '设备管理',
-        /* No more header config here! */
+    static navigationOptions = ({ navigation }) => {
+        const options = {
+            quality: 1,
+            noData: true,
+            storageOptions: {
+                skipBackup: true
+            }
+        };
+
+        return {
+            title: '设备管理',
+            //   headerTitle: <Icon name={"alert"} size="lg" />,
+            headerRight: (
+                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera"); }}>
+                    <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 20, color: 'white' }}>添加</Text>
+                        <Icon name={"scan"} size="lg" />
+                    </View>
+                </TouchableOpacity>
+            ),
+        };
     };
-    // static code = ({ navigation }) => {
-    //     return {
-    //         title: navigation.getParam('otherParam', 'A Nested Details Screen'),
-    //     };
-    // };
+ 
     constructor(props) {
         super(props);
         this.state = {
             name: '', //搜索关键词
             isRefreshing: false,
             equipmentList: equipmentListTest,
+            animate: new Animated.Value(0), // 二维坐标{x:0,y:0}
         };
         this.page = 1;//默认获取第一页数据
-    }
-    _onPressButton() {
-        // Alert.alert('You tapped the button!'+local.get("code"));
-        // local.get('code').then((code) => {
-        //     console.log("get code:"+ code);
-        // });
-        //    httpApi.personLogin(this.state.userName, this.state.password)
-        httpApi.personLogin('yhj', '123456')
-            .then((response) => {
-                let code = response.data['data0'];
-                if (code == 1000) {
-                    let cookie = response.headers["Cookie"];
-                    local.set("cookie", cookie);
-                    this.props.navigation.navigate('Main');
-                }
-                else
-                    Alert.alert('错误', JSON.stringify(data));
-            });
-        //   this.props.navigation.navigate('UserLogin');
     }
 
     componentDidMount() {
@@ -136,8 +138,8 @@ export default class equipmentListView extends Component<Props> {
                     data={this.state.equipmentList.Table}
                     renderItem={({ item }) => <EquipmentListItem data={item} style={{ marginTop: 5 }}
                         onPress={() => {
-                            let a = 1;
-                            this.props.navigation.navigate('RentDetail', { id: item.id });
+                            // let a = 1;
+                            // this.props.navigation.navigate('RentDetail', { id: item.id });
                         }} />}
                     removeClippedSubviews={true}
                 />
@@ -161,6 +163,11 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'orange',
         marginBottom: 30,
+    },
+    preview: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     textInputStyle: {
         backgroundColor: 'white',

@@ -2,12 +2,11 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
 import { Row, Rows, Table } from 'react-native-table-component';
 
 import local from '../tools/storage'
 import httpApi from '../tools/api'
-import { ScrollView } from 'react-native-gesture-handler';
 
 var Dimensions = require('Dimensions');
 var width = Dimensions.get('window').width;
@@ -15,7 +14,7 @@ var width = Dimensions.get('window').width;
 var dataTest = {
     "Table": [{
         "equipmentid": 22, "id": 7, "contractno": "888", "facilitycode": "123456789",
-        "name": "杭州共基网络科技有限公司", "address": "江干区", "classift": "复印机", "brand": "京瓷", "model": "1880",
+        "name": "有限公司", "address": "", "classift": "", "brand": "", "model": "",
         "initialcount": 0, "cycle": 1
     }],
     "Table1": [{ "id": 6, "is_sign": 0 }]
@@ -62,9 +61,6 @@ export default class rentDetailView extends Component<Props> {
 
         httpApi.getRentDetail(itemId).then((data) => {
             this.setState({ data: data });
-
-
-
             return httpApi.getRentReadingTop10(data.Table[0].equipmentid);
         }).then((data) => {
             let a = 11;

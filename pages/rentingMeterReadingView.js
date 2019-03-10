@@ -2,11 +2,11 @@
 
 import React, { Component } from 'react';
 import { CheckBox, Button } from 'react-native-elements';
-import { TouchableOpacity, StyleSheet, Text, TextInput, Image, View, Alert, PixelRatio } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, TextInput, Image, View, Alert, ScrollView,PixelRatio } from 'react-native';
 
 import local from '../tools/storage'
 import httpApi from '../tools/api'
-import { ScrollView } from 'react-native-gesture-handler';
+// import { ScrollView } from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker'; //第三方相机
 import { } from '@ant-design/react-native';
 

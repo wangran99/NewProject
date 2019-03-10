@@ -29,10 +29,10 @@ const data = [{
     name: 'alert',
     text: `指派单`,
 }, {
-    name: 'http://www.glk119.com/UploadFile/images/15159C480396D49FA6793C2B7C363843.png',
+    name: 'file',
     text: `单据管理`,
 }, {
-    name: 'alipay-circle',
+    name: 'car',
     text: `车辆管理`,
 }, {
     name: 'alipay-circle',
@@ -50,7 +50,7 @@ const data = [{
     name: 'alipay-circle',
     text: `备忘录`,
 }, {
-    name: 'alipay-circle',
+    name: 'tool',
     text: `维修工单`,
 }, {
     name: 'alipay-circle',
@@ -62,10 +62,10 @@ const data = [{
     name: 'alipay-circle',
     text: `业务员派单`,
 }, {
-    name: 'alipay-circle',
+    name: 'read',
     text: `技术资料`,
 }, {
-    name: 'alipay-circle',
+    name: 'notification',
     text: `业务公开`,
 }];
 
@@ -132,7 +132,7 @@ export default class mainView extends Component<Props> {
             // Alert.alert('person name:' + personInfo.Table[0].jobnumber, JSON.stringify(personInfo));
             this.setState({ personInfo })
         });
-        this.refreshgetAnnouncement("");
+        this._refreshAnnouncement();
         this.getOrderList();
         //收到监听
         this.updateOderListlistener = DeviceEventEmitter.addListener('orderList', (e) => {
@@ -181,54 +181,12 @@ export default class mainView extends Component<Props> {
                         onChange={(value) => {
                             this.setState({ keys: value });
                         }}
+                        value={this.state.keys}
                         onCancel={this.clear.bind(this)}
-                        onSubmit={this.refreshgetAnnouncement.bind(this, this.state.keys)}
+                        onSubmit={this._refreshAnnouncement.bind(this)}
                     >
                     </SearchBar>
                 </TouchableOpacity>
-                {/* <View style={{ marginTop: 2, width: width }}>
-                    <ElementSearchBar
-                        style={{
-                            backgroundColor: "white",
-                            borderBottomColor: 'transparent',
-                            borderTopColor: 'transparent',
-                            borderColor: "red",
-                            borderWidth: 1,
-                        }}
-                        ref={(elemsearchBar) => this._elemsearchBar = elemsearchBar}
-                        containerStyle={{
-                            backgroundColor: 'white',
-                            borderWidth: 0, //no effect
-                            shadowColor: 'white', //no effect
-                            borderBottomColor: 'transparent',
-                            borderTopColor: 'transparent'
-                        }}
-                        inputStyle={{
-                            backgroundColor: 'white',
-                            borderWidth: 0, //no effect
-                            shadowColor: 'white', //no effect
-                            borderBottomColor: 'transparent',
-                            borderTopColor: 'transparent'
-                        }}
-                        placeholder="99999"
-                        onCancel={
-                            (value) => {
-                                let a = 1;
-                                this.clear();
-                            }}
-
-                        onClear={
-                            (value) => {
-                                let a = 1;
-                                this.clear();
-                            }}
-                        onBlur={() => {
-
-                        }}
-                        onChangeText={this.updateSearch}
-                        value={this.state.searchContent} />
-                </View>
-                <TextInput ref={(input) => this.input = input}></TextInput> */}
                 <View style={{ backgroundColor: 'lightgray', marginTop: 0, width: width }}
                     onPress={this.clear.bind(this)}>
                     <Text style={styles.titleText} onPress={this.clear.bind(this)}> 公告列表</Text >
@@ -238,16 +196,15 @@ export default class mainView extends Component<Props> {
                 <FlatList
                     style={{ flex: 1, marginTop: 2 }}
                     refreshing={this.state.isRefreshing}
-                    onRefresh={this.refreshgetAnnouncement.bind(this)}
-                    onEndReached={this.fetchMoreAnnouncement.bind(this)}
+                    onRefresh={this._refreshAnnouncement.bind(this)}
+                    onEndReached={this._getAnnouncement.bind(this)}
                     onEndReachedThreshold={0.1}
                     initialNumToRender={10}
                     ListEmptyComponent={() => {
                         return (
-
                             <TouchableOpacity
                                 style={{ flex: 1 }}
-                                onPress={() => this.refreshgetAnnouncement()}
+                                onPress={() => this._refreshAnnouncement.bind(this)}
                                 activeOpacity={0.3}>
                                 <View style={{ flex: 1, height: 350, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
                                     {/* <View style={{ flex: 1, backgroundColor: 'lightgray' }}></View> */}
@@ -287,41 +244,30 @@ export default class mainView extends Component<Props> {
             </View >
         );
     }
-    refreshgetAnnouncement(keys) {
-        this.announcementPageIndex = 1;
-        httpApi.getAnnouncement(1, keys).then((data) => {
-            this.setState({
-                announcement: data
-            });
-            this.clear();
+    _getAnnouncement() {
+        httpApi.getAnnouncement(this.announcementPageIndex, this.state.keys).then((data) => {
+            if (this.announcementPageIndex == 1)
+                this.setState({ announcement: data });
+            else if (this.announcementPageIndex <= data.Table1[0].pagecounts) {
+                let newArry = this.state.announcement.Table.concat(data.Table);
+                this.state.announcement.Table = newArry;
+                let newjson = JSON.parse(JSON.stringify(this.state.announcement));
+                newjson.Table = newArry;
+                this.setState({ announcement: newjson });
+            }
             this.announcementPageIndex++;
         });
-
-        this.setState({ isRefreshing: false });
     }
     clear() {
         this.setState({ keys: '' });
-        // console.warn("cancel antd");
-        this.refs.searchBar.inputRef.clear();
-        this.refs.searchBar.inputRef.blur();
-        Keyboard.dismiss
+        Keyboard.dismiss;
     }
-    fetchMoreAnnouncement() {
-        let a = this.state.keys;
-        if (this.announcementPageIndex > this.state.announcement.Table1[0].pagecounts)
-            return;
-        httpApi.getAnnouncement(this.announcementPageIndex).then((data) => {
-            //  let b = JSON.stringify(this.state);
-            let newArry = this.state.announcement.Table.concat(data.Table);
-            this.state.announcement.Table = newArry;
-            this.clear();
-            this.announcementPageIndex++;
-        });
+    _refreshAnnouncement() {
+        this.announcementPageIndex = 1;
+        this._getAnnouncement();
     }
 
     renderOrderView() {
-        //   Alert.alert("cuowu",JSON.stringify(this.state.orderList.Table.length));
-
         return (
             <View style={{ flex: 1, justifyContent: 'center', }}>
                 {/* <SearchBar placeholder="OrderView" showCancelButton /> */}

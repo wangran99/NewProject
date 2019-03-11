@@ -384,6 +384,8 @@ export default class mainView extends Component<Props> {
             this.props.navigation.navigate("OrderPai");
         else if (index == 1)
             this.props.navigation.navigate("DanjuList");
+        else if (index == 2)
+            this.props.navigation.navigate("KilometerStatistics");
         else if (index == 3)
             this.props.navigation.navigate("RentList");
         else if (index == 4)

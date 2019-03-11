@@ -119,6 +119,32 @@ class httpapi {
     static addEquipment(facilitycode, cid, classift, brand, model, doorplate, purchase, assetnumber, remark) {
         return postData("/commList.asmx/EquipmentAdd", { facilitycode, cid, classift, brand, model, doorplate, purchase, assetnumber, remark });
     }
+
+    //车辆list
+    static getCarList(count, starttime, endtime) {
+        return postData("/Car.asmx/CarList", { count, starttime, endtime });
+    }
+
+    //车辆信息
+    static getCarDetail(carId) {
+        return postData("/Car.asmx/CarDetails", { carId });
+    }
+
+    //车辆行驶记录上传
+    static postCarReturn(carid, Afterkilometre, Afterimg) {
+        return postData("/Car.asmx/CarReturn", { carid, Afterkilometre, Afterimg });
+    }
+
+    //获得车辆列表
+    static getCarListUser(starttime, endtime) {
+        return postData("/Car.asmx/CarListUser", { starttime, endtime });
+    }
+
+    //发送车辆使用前信息
+    //licence实际应为车辆id
+    static postCarUse(licence, beforekilometre, beforeimg) {
+        return postData("/Car.asmx/CarUse", { licence, beforekilometre, beforeimg });
+    }
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

@@ -28,6 +28,9 @@ var RentingMeterReadingView = require('./pages/rentingMeterReadingView')
 var EquipmentListView = require('./pages/equipmentListView')
 var BarCodeCameraView = require('./pages/barCodeCameraView')
 var AddNewEquipmentView = require('./pages/addNewEquipmentView')
+var KilometerStatisticsView = require('./pages/kilometerStatisticsView')
+var CarDetailView = require('./pages/carDetailView')
+var CarManagementView = require('./pages/carManagementView')
 
 
 const instructions = Platform.select({
@@ -53,7 +56,10 @@ const AppStack = createStackNavigator(
     RentingMeterReading: RentingMeterReadingView,
     EquipmentList: EquipmentListView,
     BarCodeCamera: BarCodeCameraView,
-    AddNewEquipment:AddNewEquipmentView,
+    AddNewEquipment: AddNewEquipmentView,
+    KilometerStatistics: KilometerStatisticsView,
+    CarDetail:CarDetailView,
+    CarManagement:CarManagementView,
     Test: TestView,
   },
   {

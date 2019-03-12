@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert, TouchableOpacity, PixelRatio } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, Image, View, Alert, TouchableOpacity, PixelRatio,DeviceEventEmitter } from 'react-native';
 import ImagePicker from 'react-native-image-picker'; //第三方相机
 import { Dropdown } from 'react-native-material-dropdown';
 
@@ -55,6 +55,7 @@ export default class carManagementView extends Component<Props> {
             .then((data) => {
                 let code = data.Table[0].Column1;
                 if (code == 1000) {
+                    DeviceEventEmitter.emit('kilometerStatisticsList',"jianting"); //发监听
                     Alert.alert(
                         '成功',
                         '' + data.Table[0].Column2,

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { FlatList, StyleSheet, Text, TouchableOpacity, Image, View, Alert } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, Image, View, Alert,DeviceEventEmitter } from 'react-native';
 import { Carousel, Icon, SearchBar, } from '@ant-design/react-native';
 import DatePicker from 'react-native-datepicker';
 
@@ -62,6 +62,15 @@ export default class kilometerStatisticsView extends Component<Props> {
 
     componentDidMount() {
         this._getCarList();
+          //收到监听
+          this.kilometerStatisticsListlistener = DeviceEventEmitter.addListener('kilometerStatisticsList', (e) => {
+            this._getCarList();
+        });
+    }
+
+    componentWillUnmount() {
+        // 移除监听 
+        this.kilometerStatisticsListlistener.remove();
     }
     _getCarList() {
         httpApi.getCarList(this.pageIndex, this.state.start, this.state.end)

@@ -31,6 +31,9 @@ var AddNewEquipmentView = require('./pages/addNewEquipmentView')
 var KilometerStatisticsView = require('./pages/kilometerStatisticsView')
 var CarDetailView = require('./pages/carDetailView')
 var CarManagementView = require('./pages/carManagementView')
+var ProjectListView = require('./pages/projectListView')
+var ProjectProcessView = require('./pages/projectProcessView')
+var ProjectProcessAddView = require('./pages/projectProcessAddView')
 
 
 const instructions = Platform.select({
@@ -58,8 +61,11 @@ const AppStack = createStackNavigator(
     BarCodeCamera: BarCodeCameraView,
     AddNewEquipment: AddNewEquipmentView,
     KilometerStatistics: KilometerStatisticsView,
-    CarDetail:CarDetailView,
-    CarManagement:CarManagementView,
+    CarDetail: CarDetailView,
+    CarManagement: CarManagementView,
+    ProjectList: ProjectListView,
+    ProjectProcess:ProjectProcessView,
+    ProjectProcessAdd:ProjectProcessAddView,
     Test: TestView,
   },
   {

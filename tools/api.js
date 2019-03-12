@@ -145,6 +145,22 @@ class httpapi {
     static postCarUse(licence, beforekilometre, beforeimg) {
         return postData("/Car.asmx/CarUse", { licence, beforekilometre, beforeimg });
     }
+
+    //获得工程list
+    static getProjectList(count, name) {
+        return postData("/Project.asmx/ProjectList", { count, name });
+    }
+
+    //获得工程进度list
+    static getProjectProcessList(count, pid) {
+        return postData("/Project.asmx/ProjectProcessList", { count, pid });
+    }
+
+    //添加工程进度
+    static projectProcessAdd(pid, schedule, explain, img) {
+        return postData("/Project.asmx/ProjectProcessAdd", { pid, schedule, explain, img });
+    }
+
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

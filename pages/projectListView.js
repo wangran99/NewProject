@@ -12,6 +12,7 @@ import ProjectListItem from '../component/projectListItem'
 
 var Dimensions = require('Dimensions');
 var width = Dimensions.get('window').width;
+var height = Dimensions.get('window').height;
 
 var dataTest = {
     "Table": [{ "rowId": 1, "id": 3, "projectname": "测试工程3", "itemsname": "", "addtime": "2018/12/17 18:59:29", "status": 0, "schedule": 100 }],

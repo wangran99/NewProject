@@ -34,7 +34,8 @@ var CarManagementView = require('./pages/carManagementView')
 var ProjectListView = require('./pages/projectListView')
 var ProjectProcessView = require('./pages/projectProcessView')
 var ProjectProcessAddView = require('./pages/projectProcessAddView')
-
+var MaintenanceExperienceView = require('./pages/maintenanceExperienceView')
+var MemoListView = require('./pages/memoListView')
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -64,8 +65,10 @@ const AppStack = createStackNavigator(
     CarDetail: CarDetailView,
     CarManagement: CarManagementView,
     ProjectList: ProjectListView,
-    ProjectProcess:ProjectProcessView,
-    ProjectProcessAdd:ProjectProcessAddView,
+    ProjectProcess: ProjectProcessView,
+    ProjectProcessAdd: ProjectProcessAddView,
+    MaintenanceExperience: MaintenanceExperienceView,
+    MemoList: MemoListView,
     Test: TestView,
   },
   {

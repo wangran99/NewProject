@@ -161,6 +161,16 @@ class httpapi {
         return postData("/Project.asmx/ProjectProcessAdd", { pid, schedule, explain, img });
     }
 
+    //获取技术文档
+    static getTechnologyList(page, keys) {
+        return postData("/commList.asmx/TechnologyList", { page, keys });
+    }
+
+    //获取备忘录列表 count:页数
+    static getMemoList(count) {
+        return postData("/Memo.asmx/MemoList", { count });
+    }
+
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

@@ -392,6 +392,10 @@ export default class mainView extends Component<Props> {
             this.props.navigation.navigate("EquipmentList");
         else if (index == 5)
             this.props.navigation.navigate("ProjectList");
+        else if (index == 6)
+            this.props.navigation.navigate("MaintenanceExperience");
+        else if (index == 7)
+            this.props.navigation.navigate("MemoList");
     }
     renderMyView() {
         const list = [

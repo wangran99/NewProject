@@ -32,7 +32,7 @@ export default class memoListView extends Component<Props> {
             title: '备忘录',
             //   headerTitle: <Icon name={"alert"} size="lg" />,
             headerRight: (
-                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera"); }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("AddMemo"); }}>
                     <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <Icon name={"plus-square"} size="lg" />
                     </View>

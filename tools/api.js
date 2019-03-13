@@ -171,6 +171,11 @@ class httpapi {
         return postData("/Memo.asmx/MemoList", { count });
     }
 
+    //添加备忘录 status  pub：是否公开
+    static addMemo(headline, details, status, remark, pub) {
+        return postData("/Memo.asmx/MemoAdd", { headline, details, status, remark, pub });
+    }
+
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

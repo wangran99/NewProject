@@ -144,7 +144,7 @@ export default class memoListView extends Component<Props> {
                     renderItem={({ item }) => <MemoListItem data={item} style={{ marginTop: 5 }}
                         onPress={() => {
                             // let a = 1;
-                            // this.props.navigation.navigate('RentDetail', { id: item.id });
+                             this.props.navigation.navigate('MemoDetail', { id: item.id });
                         }} />}
                     removeClippedSubviews={true}
                 />

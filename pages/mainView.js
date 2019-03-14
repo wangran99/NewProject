@@ -41,13 +41,13 @@ const data = [{
     name: 'alipay-circle',
     text: `添加设备`,
 }, {
-    name: 'alipay-circle',
+    name: 'project',
     text: `工程管理`,
 }, {
-    name: 'alipay-circle',
+    name: 'read',
     text: `维修经验`,
 }, {
-    name: 'alipay-circle',
+    name: 'solution',
     text: `备忘录`,
 }, {
     name: 'tool',
@@ -396,6 +396,8 @@ export default class mainView extends Component<Props> {
             this.props.navigation.navigate("MaintenanceExperience");
         else if (index == 7)
             this.props.navigation.navigate("MemoList");
+        else if (index == 8)
+            this.props.navigation.navigate("OrderRepair");
     }
     renderMyView() {
         const list = [

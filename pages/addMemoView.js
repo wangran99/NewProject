@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { ScrollView, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
-import { TextareaItem, Picker, PickerView } from '@ant-design/react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, TextInput, Image, View, Alert } from 'react-native';
+import { TextareaItem, Icon, PickerView } from '@ant-design/react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
 import local from '../tools/storage'

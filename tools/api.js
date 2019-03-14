@@ -176,6 +176,21 @@ class httpapi {
         return postData("/Memo.asmx/MemoAdd", { headline, details, status, remark, pub });
     }
 
+    //获取单个备忘录内容
+    static memoDetail(id) {
+        return postData("/Memo.asmx/MemoDetails", { id });
+    }
+
+    //修改单个备忘录内容
+    static editMemo(orderid, headline, details, status, remark, pub) {
+        return postData("/Memo.asmx/MemoPostOrderId", { orderid, headline, details, status, remark, pub });
+    }
+
+    //维修工单list。count：页数。 state：0：全部。1:已完成。2：已取消。3：未完成
+    static getOrderRepairList(count, state) {
+        return postData("/Order.asmx/OrderListWeiXiu", { count, state });
+    }
+
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

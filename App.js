@@ -37,6 +37,9 @@ var ProjectProcessAddView = require('./pages/projectProcessAddView')
 var MaintenanceExperienceView = require('./pages/maintenanceExperienceView')
 var MemoListView = require('./pages/memoListView')
 var AddMemoView = require('./pages/addMemoView')
+var MemoDetailView = require('./pages/memoDetailView')
+var EditMemoView = require('./pages/editMemoView')
+var OrderRepairView = require('./pages/orderRepairView')
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -71,6 +74,9 @@ const AppStack = createStackNavigator(
     MaintenanceExperience: MaintenanceExperienceView,
     MemoList: MemoListView,
     AddMemo: AddMemoView,
+    MemoDetail: MemoDetailView,
+    EditMemo: EditMemoView,
+    OrderRepair: OrderRepairView,
     Test: TestView,
   },
   {

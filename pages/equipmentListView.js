@@ -37,7 +37,7 @@ export default class equipmentListView extends Component<Props> {
             title: '设备管理',
             //   headerTitle: <Icon name={"alert"} size="lg" />,
             headerRight: (
-                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera"); }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera", { from: "equipmentListView" }); }}>
                     <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 20, color: 'white' }}>添加</Text>
                         <Icon name={"scan"} size="lg" />
@@ -46,7 +46,7 @@ export default class equipmentListView extends Component<Props> {
             ),
         };
     };
- 
+
     constructor(props) {
         super(props);
         this.state = {

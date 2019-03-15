@@ -40,6 +40,9 @@ var AddMemoView = require('./pages/addMemoView')
 var MemoDetailView = require('./pages/memoDetailView')
 var EditMemoView = require('./pages/editMemoView')
 var OrderRepairView = require('./pages/orderRepairView')
+var OrderRepairDetailView = require('./pages/orderRepairDetailView')
+var OrderReplenishView = require('./pages/orderReplenishView')
+var AddOrderRepairReportView = require('./pages/addOrderRepairReportView')
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -77,6 +80,9 @@ const AppStack = createStackNavigator(
     MemoDetail: MemoDetailView,
     EditMemo: EditMemoView,
     OrderRepair: OrderRepairView,
+    OrderRepairDetail: OrderRepairDetailView,
+    OrderReplenish: OrderReplenishView,
+    AddOrderRepairReport: AddOrderRepairReportView,
     Test: TestView,
   },
   {

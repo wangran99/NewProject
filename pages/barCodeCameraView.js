@@ -53,9 +53,14 @@ export default class barCodeCameraView extends Component<Props> {
             // Vibration.vibrate([0, 500, 1000, 500],false)
             Vibration.vibrate();
             console.log(e);
-            this.barcode=e.data;
-            this.props.navigation.navigate("AddNewEquipment", { data: e });
-            // this.props.navigation.dismiss();
+
+            this.barcode = e.data;
+            const { navigation } = this.props;
+            const from = navigation.getParam('from', '');
+            if (from == "equipmentListView")
+                navigation.navigate("AddNewEquipment", { data: e });
+            else if (from == "orderRepairDetailView")
+                navigation.navigate("OrderReplenish", { data: e });
         }
     }
     render() {

@@ -70,7 +70,7 @@ export default class orderRepairUnfinishedView extends Component<Props> {
     }
     render() {
         const { data, onPress, navig } = this.props;
-        let a =1;
+        let a = 1;
         return (
             <FlatList
                 style={{ marginHorizontal: 5, marginVertical: 10, flex: 1, marginTop: 2 }}
@@ -115,7 +115,7 @@ export default class orderRepairUnfinishedView extends Component<Props> {
                 renderItem={({ item }) => <OrderRepairListItem data={item} navigator={navig} style={{ marginTop: 5 }}
                     onPress={() => {
                         let a = 1;
-                        this.props.navigation.navigate('MemoDetail', { id: item.id });
+                        navig.navigate("OrderRepairDetail", { id: item.id })
                     }} />}
                 removeClippedSubviews={true}
             />

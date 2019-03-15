@@ -191,6 +191,24 @@ class httpapi {
         return postData("/Order.asmx/OrderListWeiXiu", { count, state });
     }
 
+    //获取工单维修记录
+    static getOrderRecord(equipId) {
+        return postData("/Order.asmx/OrderRecord ", { equipId });
+    }
+
+    //补充工单
+    static orderReplenish(orderId, facilitycode, ordertype, describe, phone, orderamount) {
+        return postData("/Order.asmx/OrderReplenish", { orderId, facilitycode, ordertype, describe, phone, orderamount });
+    }
+
+    //添加工单维修报告
+    static addOrderServiceReport(orderid, solution, replace, address, phenomena, handling,
+        jthandling, feedback, peice, integral, integralex, rectype, img) {
+        return postData("/Order.asmx/OrderServiceReport", {
+            orderid, solution, replace, address, phenomena, handling, jthandling,
+            feedback, peice, integral, integralex, rectype, img
+        });
+    }
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

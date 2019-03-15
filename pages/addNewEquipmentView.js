@@ -144,7 +144,7 @@ export default class addNewEquipmentView extends Component<Props> {
                                 date={this.state.purchase}
                                 mode='date'
                                 placeholder='请选择时间'
-                                minDate="2010-01-01"
+                                minDate="2019-01-01"
                                 maxDate="2050-01-01"
                                 format='YYYY-MM-DD'      //这里定义时间的样式
                                 // format='YYYY-MM-DD HH:mm'      //⚠️⚠️⚠️如果想使用24小时的时间制度这里的hh要使用大写的HH....哈哈哈

@@ -87,17 +87,25 @@ export default class orderRepairListItem extends Component {
                         <Text style={[styles.textStyle]}>到达时间:</Text>
                         <Text style={[styles.textStyle]}>{data.arrivaltime == '' ? '暂未到达' : data.arrivaltime}</Text>
                     </View>
-                    <View style={{ marginHorizontal: 10, marginTop: 5, flexDirection: 'row', justifyContent: 'flex-start' }}>
+                    <View style={{ marginHorizontal: 10, marginTop: 5, flexDirection: 'row', alignItems:'center' }}>
                         <Text style={[styles.textStyle]}>工单状态:</Text>
-                        <Text style={[styles.textStyle]}>{status}</Text>
+                        <Text style={[styles.textStyle,{color:'#436EEE',fontSize:20}]}>{status}</Text>
                     </View>
                     <View style={{ marginHorizontal: 10, marginVertical: 15, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Button type="outline" title="进入工单" onPress={() =>
-                            navigator.pop()
+                            navigator.navigate("OrderRepairDetail", { id: data.id })
                         }></Button>
-                        <Button type="outline" title="取消工单"></Button>
-                        <Button type="outline" title="备忘录"></Button>
-                        <Button type="outline" title="工单转派"></Button>
+                        <Button type="outline" title="取消工单" onPress={() =>
+                            navigator.navigate("CancelOrder", { orderId: data.id })}></Button>
+                        <Button type="outline" title="备忘录" onPress={() =>
+                            navigator.navigate("MemoList")
+                        }></Button>
+                        <Button type="outline" title="工单转派" onPress={() =>
+                            navigator.navigate("OrderTransfer", { orderId: data.id })
+                        }></Button>
+                        {/* <Button type="outline" title="补充工单" onPress={() =>
+                            navigator.navigate("OrderTransfer", { orderId: data.id })
+                        }></Button> */}
                     </View>
                 </View>
             </TouchableOpacity>

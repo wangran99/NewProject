@@ -12,7 +12,7 @@ import CarListItem from '../component/carListItem'
 
 var Dimensions = require('Dimensions');
 var width = Dimensions.get('window').width;
-
+var height =  Dimensions.get('window').height;
 var dataTest = {
     "Table": [{
         "rowId": 1, "id": 3, "addtime": "2019/3/7 20:46:03", "username": "", "beforekilometre": 10.00,

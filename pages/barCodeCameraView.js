@@ -60,7 +60,11 @@ export default class barCodeCameraView extends Component<Props> {
             if (from == "equipmentListView")
                 navigation.navigate("AddNewEquipment", { data: e });
             else if (from == "orderRepairDetailView")
-                navigation.navigate("OrderReplenish", { data: e });
+                navigation.navigate("OrderRepairReplenish", { data: e });
+            else if (from == "orderInstallDetailView")
+                navigation.navigate("OrderInstallReplenish", { data: e });
+            else if (from == "mainView")
+                navigation.navigate("CallForRepair", { data: e });
         }
     }
     render() {

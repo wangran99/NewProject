@@ -191,6 +191,16 @@ class httpapi {
         return postData("/Order.asmx/OrderListWeiXiu", { count, state });
     }
 
+    //送货工单list。count：页数。 state：0：全部。1:已完成。2：已取消。3：未完成
+    static getOrderDeliveryList(count, state) {
+        return postData("/Order.asmx/OrderListSongHuo", { count, state });
+    }
+
+    //安装工单list。count：页数。 state：0：全部。1:已完成。2：已取消。3：未完成
+    static getOrderInstallList(count, state) {
+        return postData("/Order.asmx/OrderListAnZhuang", { count, state });
+    }
+
     //获取工单维修记录
     static getOrderRecord(equipId) {
         return postData("/Order.asmx/OrderRecord ", { equipId });

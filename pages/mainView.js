@@ -88,6 +88,14 @@ export default class mainView extends Component<Props> {
 
         return {
             title: params ? params.title : '工作台',
+            headerRight: params ? params.headerRight : (
+                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera", { from: "mainView" }); }}>
+                    <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 20, color: 'white' }}>报修</Text>
+                        <Icon name={"scan"} size="lg" />
+                    </View>
+                </TouchableOpacity>
+            ),
         }
     }
     constructor(props) {
@@ -139,7 +147,7 @@ export default class mainView extends Component<Props> {
             this.getOrderList();
         });
         this.updateAnnouncementListlistener = DeviceEventEmitter.addListener('announcementList', (e) => {
-            this.refreshgetAnnouncement("");
+            this._refreshAnnouncement("");
         });
     }
     componentWillUnmount() {
@@ -398,6 +406,10 @@ export default class mainView extends Component<Props> {
             this.props.navigation.navigate("MemoList");
         else if (index == 8)
             this.props.navigation.navigate("OrderRepair");
+        else if (index == 9)
+            this.props.navigation.navigate("OrderDelivery");
+        else if (index == 10)
+            this.props.navigation.navigate("OrderInstall");
     }
     renderMyView() {
         const list = [
@@ -505,7 +517,21 @@ export default class mainView extends Component<Props> {
             title = "工作台";
         else if (tabName === 'myTab')
             title = "个人中心";
-        this.props.navigation.setParams({ title: title });
+        this.props.navigation.setParams({
+            title: title,
+        });
+
+        if (tabName === 'workTab')
+            this.props.navigation.setParams({
+                headerRight: (
+                    <TouchableOpacity onPress={() => { this.props.navigation.navigate("BarCodeCamera", { from: "mainView" }); }}>
+                        <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 20, color: 'white' }}>报修</Text>
+                            <Icon name={"scan"} size="lg" />
+                        </View>
+                    </TouchableOpacity>
+                ),
+            });
     }
 
     render() {

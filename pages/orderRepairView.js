@@ -6,10 +6,7 @@ import { Platform, StyleSheet, Text, TextInput, Image, View, Alert } from 'react
 import { Tabs, Icon, SearchBar, } from '@ant-design/react-native';
 import ScrollableTabView, { ScrollableTabBar, DefaultTabBar } from 'react-native-scrollable-tab-view';
 
-import OrderRepairUnfinishedView from './orderRepairUnfinishedView'
-import OrderRepairfinishedView from './orderRepairfinishedView'
-import OrderRepairCancanlledView from './orderRepairCancanlledView'
-import OrderRepairAllView from './orderRepairAllView'
+import OrderRepairTabView from './orderRepairTabView'
 
 import local from '../tools/storage'
 import httpApi from '../tools/api'
@@ -57,34 +54,14 @@ export default class orderRepairView extends Component<Props> {
         //   this.props.navigation.navigate('UserLogin');
     }
     render() {
-        const tabs = [
-            { title: '未完成' },
-            { title: '已完成' },
-            { title: '已取消' },
-            { title: '全部工单' },
-        ];
         return (
-            // <View style={styles.container}>
-            //     <Tabs tabs={tabs} animated></Tabs>
-            //     <OrderRepairUnfinishedView style={{ height:'100%', backgroundColor: 'red' }}></OrderRepairUnfinishedView>
-            //     <OrderRepairUnfinishedView style={{ height:'100%', backgroundColor: 'red' }}></OrderRepairUnfinishedView>
-            //     <OrderRepairUnfinishedView style={{ height:'100%', backgroundColor: 'red' }}></OrderRepairUnfinishedView>
-            //     <OrderRepairUnfinishedView style={{ height:'100%', backgroundColor: 'red' }}></OrderRepairUnfinishedView>
-
-            // </View>
             <ScrollableTabView style={{ backgroundColor: 'lightgray' }}
                 initialPage={0}
-                renderTabBar={() => <ScrollableTabBar />}
-            >
-                {/* <Text tabLabel='Tab #1'>My</Text>
-                <Text tabLabel='Tab #2 word word'>favorite</Text>
-                <Text tabLabel='Tab #3 word word word'>project</Text>
-                <Text tabLabel='Tab #4 word word word word'>favorite</Text>
-                <Text tabLabel='Tab #5'>project</Text> */}
-                <OrderRepairUnfinishedView tabLabel='未完成' navig={this.props.navigation}></OrderRepairUnfinishedView>
-                <OrderRepairfinishedView tabLabel='已完成'></OrderRepairfinishedView>
-                <OrderRepairCancanlledView tabLabel='已取消'></OrderRepairCancanlledView>
-                <OrderRepairAllView tabLabel='全部工单'></OrderRepairAllView>
+                renderTabBar={() => <ScrollableTabBar />}  >
+                <OrderRepairTabView tabLabel='未完成' navig={this.props.navigation} status={3}></OrderRepairTabView>
+                <OrderRepairTabView tabLabel='已完成' navig={this.props.navigation} status={1}></OrderRepairTabView>
+                <OrderRepairTabView tabLabel='已取消' navig={this.props.navigation} status={2}></OrderRepairTabView>
+                <OrderRepairTabView tabLabel='全部工单' navig={this.props.navigation} status={0}></OrderRepairTabView>
             </ScrollableTabView>
         );
     }

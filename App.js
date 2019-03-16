@@ -41,8 +41,14 @@ var MemoDetailView = require('./pages/memoDetailView')
 var EditMemoView = require('./pages/editMemoView')
 var OrderRepairView = require('./pages/orderRepairView')
 var OrderRepairDetailView = require('./pages/orderRepairDetailView')
-var OrderReplenishView = require('./pages/orderReplenishView')
+var OrderRepairReplenishView = require('./pages/orderRepairReplenishView')
 var AddOrderRepairReportView = require('./pages/addOrderRepairReportView')
+var OrderDeliveryView = require('./pages/orderDeliveryView')
+var OrderDeliveryReplenishView = require('./pages/orderDeliveryReplenishView')
+var OrderInstallView = require('./pages/orderInstallView')
+var OrderInstallDetailView = require('./pages/orderInstallDetailView')
+var OrderInstallReplenishView = require('./pages/orderInstallReplenishView')
+var CallForRepairView = require('./pages/callForRepairView')
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -81,8 +87,14 @@ const AppStack = createStackNavigator(
     EditMemo: EditMemoView,
     OrderRepair: OrderRepairView,
     OrderRepairDetail: OrderRepairDetailView,
-    OrderReplenish: OrderReplenishView,
+    OrderRepairReplenish: OrderRepairReplenishView,
     AddOrderRepairReport: AddOrderRepairReportView,
+    OrderDelivery: OrderDeliveryView,
+    OrderDeliveryReplenish: OrderDeliveryReplenishView,
+    OrderInstall: OrderInstallView,
+    OrderInstallDetail:OrderInstallDetailView,
+    OrderInstallReplenish:OrderInstallReplenishView,
+    CallForRepair:CallForRepairView,
     Test: TestView,
   },
   {

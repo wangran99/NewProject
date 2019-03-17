@@ -91,7 +91,7 @@ export default class mainView extends Component<Props> {
             headerRight: params ? params.headerRight : (
                 <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera", { from: "mainView" }); }}>
                     <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 20, color: 'white' }}>报修</Text>
+                        <Text style={{ fontSize: 18, color: 'white' }}>报修</Text>
                         <Icon name={"scan"} size="lg" />
                     </View>
                 </TouchableOpacity>
@@ -440,16 +440,16 @@ export default class mainView extends Component<Props> {
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', marginTop: 10, marginBottom: 10 }}>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="已接工单" number="12" source={require('../img/userLogin.jpg')} onPress={this._onPressMyGridItem.bind(this, 0)} />
+                            <WorkInfoItem title="已接工单" number="12" icon={"carry-out"} onPress={this._onPressMyGridItem.bind(this, 0)} />
                         </View>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="累计金额" number="100" source={require('../img/companyLogin.jpg')} onPress={this._onPressMyGridItem.bind(this, 1)} />
+                            <WorkInfoItem title="累计金额" number="100" icon={"dollar"} onPress={this._onPressMyGridItem.bind(this, 1)} />
                         </View>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="累计积分" number="123" source={require('../img/userLogin.jpg')} onPress={this._onPressMyGridItem.bind(this, 2)} />
+                            <WorkInfoItem title="累计积分" number="123" icon={"account-book"} onPress={this._onPressMyGridItem.bind(this, 2)} />
                         </View>
                         <View style={{ flex: 1, }} >
-                            <WorkInfoItem title="累计积分" number="8" source={require('../img/companyLogin.jpg')} onPress={this._onPressMyGridItem.bind(this, 3)} />
+                            <WorkInfoItem title="累计积分2" number="8" icon={"account-book"} onPress={this._onPressMyGridItem.bind(this, 3)} />
                         </View>
                         {/* <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} /> */}
                     </View>
@@ -479,8 +479,12 @@ export default class mainView extends Component<Props> {
         );
     }
     _onPressMyListItem(index) {
-        alert("list item index" + index);
-        //   this.props.navigation.navigate('UserLogin');
+        if (index == 0)
+            this.props.navigation.navigate('OrderQuery');
+        else if (index == 1)
+            this.props.navigation.navigate('ChangePhoneNumber');
+        else if (index == 2)
+            this.props.navigation.navigate('ChangePassword');
     }
     _onPressMyGridItem(index) {
         //    alert("my grid item index" + index);
@@ -526,7 +530,7 @@ export default class mainView extends Component<Props> {
                 headerRight: (
                     <TouchableOpacity onPress={() => { this.props.navigation.navigate("BarCodeCamera", { from: "mainView" }); }}>
                         <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 20, color: 'white' }}>报修</Text>
+                            <Text style={{ fontSize: 18, color: 'white' }}>报修</Text>
                             <Icon name={"scan"} size="lg" />
                         </View>
                     </TouchableOpacity>

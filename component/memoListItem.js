@@ -16,7 +16,7 @@ export default class memoListItem extends Component {
                 <View style={styles.containerStyle} onPress={onPress}>
                     <View style={{ marginHorizontal: 10, marginTop: 10, flexDirection: 'row', }}>
                         <Text style={[styles.textStyle, { fontSize: 20, color: backgroundColor }]} numberOfLines={1}>
-                            {data.headline}+
+                            {data.headline}
                         </Text>
                         <Text style={[styles.textStyle, {
                             position: 'absolute',

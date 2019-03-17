@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { TouchableOpacity, StyleSheet, Text, FlatList, Image, View, Alert } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, FlatList, Image, View, Alert, DeviceEventEmitter } from 'react-native';
 import { Carousel, Icon, SearchBar, } from '@ant-design/react-native';
 
 import local from '../tools/storage'
@@ -43,7 +43,7 @@ export default class memoListView extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            isRefreshing:false,
+            isRefreshing: false,
             data: dataTest,
         };
         this.pageIndex = 1;
@@ -51,103 +51,98 @@ export default class memoListView extends Component<Props> {
 
     componentDidMount() {
         this._getMemoList();
+        //收到监听
+        this.updateLististener = DeviceEventEmitter.addListener('memoUpdate', (e) => {
+            this._refreshMemoList();
+        });
     }
-
+    componentWillUnmount() {
+        // 移除监听 
+        this.updateLististener.remove();
+    }
     _getMemoList() {
         httpApi.getMemoList(this.pageIndex).then(data => {
-            if (this.pageIndex == 1)
+            if (this.pageIndex == 1) {
                 this.setState({ data });
+                this.pageIndex = 2
+            }
             else if (this.pageIndex <= data.Table1[0].pagecounts) {
                 let newArry = this.state.data.Table.concat(data.Table);
                 this.state.data.Table = newArry;
                 let newjson = JSON.parse(JSON.stringify(this.state.data));
                 newjson.Table = newArry;
                 this.setState({ data: newjson });
+                this.pageIndex++;
             }
-            this.pageIndex++;
+
         });
     }
+
     _refreshMemoList() {
         this.pageIndex = 1;
         this._getMemoList();
     }
-    _onPressButton() {
-        // Alert.alert('You tapped the button!'+local.get("code"));
-        // local.get('code').then((code) => {
-        //     console.log("get code:"+ code);
-        // });
-        //    httpApi.personLogin(this.state.userName, this.state.password)
-        httpApi.personLogin('yhj', '123456')
-            .then((response) => {
-                let code = response.data['data0'];
-                if (code == 1000) {
-                    let cookie = response.headers["Cookie"];
-                    local.set("cookie", cookie);
-                    this.props.navigation.navigate('Main');
-                }
-                else
-                    Alert.alert('错误', JSON.stringify(data));
-            });
-        //   this.props.navigation.navigate('UserLogin');
-    }
+
     render() {
         return (
             <View style={styles.container}>
                 {/*{头像}*/}
-                <Image style={{ width: width, height: 130 }} source={require('../img/memorandum-list-icon.jpg')}  />
+                <Image style={{ width: width, height: 130 }} source={require('../img/memorandum-list-icon.jpg')} />
                 {/* <Image source={require('../img/new-memorandum.png')} style={[styles.iconStyle,{ position: 'absolute',
                                         left: (width/2-35),
                                       //  bottom:35,
                                          top: 100,
                                         // marginLeft: 10
                                         }]} /> */}
-                <FlatList
-                    style={{ flex: 1, marginTop: 2 }}
-                    refreshing={this.state.isRefreshing}
-                    onRefresh={this._refreshMemoList.bind(this)}
-                    onEndReached={this._getMemoList.bind(this)}
-                    onEndReachedThreshold={0.1}
-                    initialNumToRender={10}
-                    ListEmptyComponent={() => {
-                        return (
+                <View style={{ height: "100%" }}>
+                    <FlatList
+                        style={{ height: '100%', marginTop: 2 }}
+                        refreshing={this.state.isRefreshing}
+                        onRefresh={this._refreshMemoList.bind(this)}
+                        onEndReached={this._getMemoList.bind(this)}
+                        onEndReachedThreshold={0.01}
+                        initialNumToRender={15}
+                        ListEmptyComponent={() => {
+                            return (
 
-                            <TouchableOpacity
-                                style={{ flex: 1 }}
-                                onPress={() => this._refreshMemoList()}
-                                activeOpacity={0.3}>
-                                <View style={{ flex: 1, height: height - 65, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', marginTop: 1, marginBottom: 20 }}>
-                                    {/* <View style={{ flex: 1, backgroundColor: 'lightgray' }}></View> */}
-                                    <Image style={{
-                                        width: 80,
-                                        height: 80,
-                                    }} source={require('../img/refresh.jpg')}></Image>
-                                    <Text style={{ marginTop: 20, fontSize: 20 }}>请点击或下拉刷新</Text>
-                                </View>
-                            </TouchableOpacity>
-                        )
-                    }}
-                    ItemSeparatorComponent={() => {
-                        return (
-                            <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
-                        )
-                    }}
-                    ListFooterComponent={() => {
-                        return (
-                            this.state.data.Table && this.state.data.Table.length !== 0 ?
-                                <View style={{ marginTop: 25, marginBottom: 25 }}>
-                                    <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
-                                    <Text style={{ alignSelf: 'center', marginTop: 20 }}>没有数据了</Text>
-                                </View> : null
-                        )
-                    }}
-                    data={this.state.data.Table}
-                    renderItem={({ item }) => <MemoListItem data={item} style={{ marginTop: 5 }}
-                        onPress={() => {
-                            // let a = 1;
-                             this.props.navigation.navigate('MemoDetail', { id: item.id });
-                        }} />}
-                    removeClippedSubviews={true}
-                />
+                                <TouchableOpacity
+                                    style={{ flex: 1 }}
+                                    onPress={() => this._refreshMemoList()}
+                                    activeOpacity={0.3}>
+                                    <View style={{ flex: 1, height: height - 65, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', marginTop: 1, marginBottom: 20 }}>
+                                        {/* <View style={{ flex: 1, backgroundColor: 'lightgray' }}></View> */}
+                                        <Image style={{
+                                            width: 80,
+                                            height: 80,
+                                        }} source={require('../img/refresh.jpg')}></Image>
+                                        <Text style={{ marginTop: 20, fontSize: 20 }}>请点击或下拉刷新</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        }}
+                        ItemSeparatorComponent={() => {
+                            return (
+                                <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+                            )
+                        }}
+                        ListFooterComponent={() => {
+                            return (
+                                this.state.data.Table && this.state.data.Table.length !== 0 ?
+                                    <View style={{ marginTop: 25, marginBottom: 25 }}>
+                                        <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+                                        <Text style={{ alignSelf: 'center', marginTop: 20 }}>没有数据了</Text>
+                                    </View> : null
+                            )
+                        }}
+                        data={this.state.data.Table}
+                        renderItem={({ item }) => <MemoListItem data={item} style={{ marginTop: 5 }}
+                            onPress={() => {
+                                // let a = 1;
+                                this.props.navigation.navigate('MemoDetail', { id: item.id });
+                            }} />}
+                        removeClippedSubviews={true}
+                    />
+                </View>
             </View>
         );
     }
@@ -163,10 +158,10 @@ const styles = StyleSheet.create({
     iconStyle: {
         width: 70,
         height: 70,
-      //  marginTop: 50,
+        //  marginTop: 50,
         borderRadius: 35,
         borderWidth: 1,
-        backgroundColor:'blue',
+        backgroundColor: 'blue',
         borderColor: 'orange',
         // marginBottom: 30,
     },

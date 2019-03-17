@@ -38,6 +38,8 @@ var MaintenanceExperienceView = require('./pages/maintenanceExperienceView')
 var MemoListView = require('./pages/memoListView')
 var AddMemoView = require('./pages/addMemoView')
 var MemoDetailView = require('./pages/memoDetailView')
+var OrderMemoDetailView = require('./pages/orderMemoDetailView')
+
 var EditMemoView = require('./pages/editMemoView')
 var OrderRepairView = require('./pages/orderRepairView')
 var OrderRepairDetailView = require('./pages/orderRepairDetailView')
@@ -49,6 +51,12 @@ var OrderInstallView = require('./pages/orderInstallView')
 var OrderInstallDetailView = require('./pages/orderInstallDetailView')
 var OrderInstallReplenishView = require('./pages/orderInstallReplenishView')
 var CallForRepairView = require('./pages/callForRepairView')
+var OnlineServiceView = require('./pages/onlineServiceView')
+var OnlineServiceReplenishView = require('./pages/onlineServiceReplenishView')
+var ChangePhoneNumberView = require('./pages/changePhoneNumberView')
+var OrderQueryView = require('./pages/orderQueryView')
+var ChangePasswordView = require('./pages/changePasswordView')
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -84,6 +92,7 @@ const AppStack = createStackNavigator(
     MemoList: MemoListView,
     AddMemo: AddMemoView,
     MemoDetail: MemoDetailView,
+    OrderMemoDetail: OrderMemoDetailView,
     EditMemo: EditMemoView,
     OrderRepair: OrderRepairView,
     OrderRepairDetail: OrderRepairDetailView,
@@ -92,9 +101,14 @@ const AppStack = createStackNavigator(
     OrderDelivery: OrderDeliveryView,
     OrderDeliveryReplenish: OrderDeliveryReplenishView,
     OrderInstall: OrderInstallView,
-    OrderInstallDetail:OrderInstallDetailView,
-    OrderInstallReplenish:OrderInstallReplenishView,
-    CallForRepair:CallForRepairView,
+    OrderInstallDetail: OrderInstallDetailView,
+    OrderInstallReplenish: OrderInstallReplenishView,
+    CallForRepair: CallForRepairView,
+    OnlineService: OnlineServiceView,
+    onlineServiceReplenish: OnlineServiceReplenishView,
+    OrderQuery: OrderQueryView,
+    ChangePhoneNumber: ChangePhoneNumberView,
+    ChangePassword: ChangePasswordView,
     Test: TestView,
   },
   {
@@ -107,7 +121,7 @@ const AppStack = createStackNavigator(
       },
       headerTintColor: '#fff',
       headerTitleStyle: {
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
       },
     },
   }
@@ -115,7 +129,21 @@ const AppStack = createStackNavigator(
 const AuthStack = createStackNavigator({
   CompanyLogin: CompanyLoginView,
   UserLogin: UserLoginView,
-});
+},
+  {
+    //  initialRouteName: 'CompanyLogin',
+    //  initialRouteName: 'Test',
+    /* The header config from HomeScreen is now here */
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#1B82D2',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        // fontWeight: 'bold',
+      },
+    },
+  });
 
 const AppContainer = createAppContainer(createSwitchNavigator(
   {

@@ -10,7 +10,7 @@ import ProjectProcessItem from '../component/projectProcessItem'
 
 var Dimensions = require('Dimensions');
 var width = Dimensions.get('window').width;
-
+var height = Dimensions.get('window').height;
 var dataTest = {
     "Table": [{ "rowId": 1, "id": 3, "projectname": "测试工程3", "name": "2号任务", "status": 0, "schedule": 100, "img": "D6A7E3263E18D398F0D056D79DD9DC66.png", "_explain": "完成" },
     { "rowId": 2, "id": 2, "projectname": "测试工程3", "name": "1号任务", "status": 0, "schedule": 0, "img": "", "_explain": "" }],

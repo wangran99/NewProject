@@ -181,8 +181,18 @@ class httpapi {
         return postData("/Memo.asmx/MemoDetails", { id });
     }
 
+    //根据orderid获取备忘录内容
+    static memoDetailByOrderid(orderid) {
+        return postData("/Memo.asmx/MemoDetailsOrderid", { orderid });
+    }
+
     //修改单个备忘录内容
-    static editMemo(orderid, headline, details, status, remark, pub) {
+    static editMemo(id, headline, details, status, remark, pub) {
+        return postData("/Memo.asmx/MemoEdit", { id, headline, details, status, remark, pub });
+    }
+
+    //增加工单下的备忘录
+    static addOrderMemo(orderid, headline, details, status, remark, pub) {
         return postData("/Memo.asmx/MemoPostOrderId", { orderid, headline, details, status, remark, pub });
     }
 
@@ -219,6 +229,14 @@ class httpapi {
             feedback, peice, integral, integralex, rectype, img
         });
     }
+    static updateUserPhone(userphone) {
+        return postData("/commList.asmx/UserUpdatePhone", { userphone });
+    }
+
+    static updateUserPassword(oldPwd, newPwd, rePwd) {
+        return postData("/commList.asmx/UserUpdatePwd", { oldPwd, newPwd, rePwd });
+    }
+
     static getUserList(keys) {
         return postData("/commList.asmx/UserList", { keys });
     }

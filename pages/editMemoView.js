@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { ScrollView, StyleSheet, TouchableOpacity, TextInput, Image, View, Alert } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, TextInput, Image, View, Alert, DeviceEventEmitter } from 'react-native';
 import { TextareaItem, Icon, PickerView } from '@ant-design/react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
@@ -49,25 +49,68 @@ export default class editMemoView extends Component<Props> {
             status: 0,
             pub: 1,
         };
+        this.from = null;
+        this.oderId = null;
         this.id = 0;
-
+        this.status = 0;
+        this.pub = 0;
     }
     componentDidMount() {
-        local.get("memoid").then((value) => {
-            this.id = value;
-            return httpApi.memoDetail(value);
-        }).then(data => {
-            this.setState({
-                headline: data.Table[0].headline,
-                details: data.Table[0].details,
-                remark: data.Table[0].remark,
-                status : data.Table[0].state,
-                pub : data.Table[0].ispub,
+        const { navigation } = this.props;
+        this.from = navigation.getParam('from', null);
+        this.oderId = navigation.getParam('oderId', null);
+        this.id = navigation.getParam('memoid', null);
+        if (this.from)
+            httpApi.memoDetailByOrderid(this.oderId).then(data => {
+                this.setState({
+                    headline: data.Table[0].headline,
+                    details: data.Table[0].details,
+                    remark: data.Table[0].remark,
+                    status: data.Table[0].state,
+                    pub: data.Table[0].ispub,
+                });
+                this.status = data.Table[0].state;
+                this.pub = data.Table[0].ispub;
+                this.id = data.Table[0].id;
             });
-
-        });
+        else
+            httpApi.memoDetail(memoid).then(data => {
+                this.setState({
+                    headline: data.Table[0].headline,
+                    details: data.Table[0].details,
+                    remark: data.Table[0].remark,
+                    status: data.Table[0].state,
+                    pub: data.Table[0].ispub,
+                });
+                this.status = data.Table[0].state;
+                this.pub = data.Table[0].ispub;
+            });
     }
     _onPressButton() {
+        // if (this.from)
+        //     httpApi.addOrderMemo(this.oderId, this.state.headline, this.state.details, this.status,
+        //         this.state.remark, this.pub).then(data => {
+        //             let a = data.Table[0].Column1;
+        //             if (a == 1000) {
+        //                 Alert.alert(
+        //                     '成功',
+        //                     data.Table[0].Column2,
+        //                     [
+        //                         {
+        //                             text: '确定', onPress: () => {
+        //                                 DeviceEventEmitter.emit('memoUpdate', "jianting"); //发监听
+        //                                 this.props.navigation.pop();
+        //                             }
+        //                         },
+        //                         // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        //                         // {text: '其他', onPress: () => console.log('OK Pressed')},
+        //                     ],
+        //                     { cancelable: false }
+        //                 );
+        //             } else
+        //                 alert(data.Table[0].Column2);
+        //         });
+        // else
         httpApi.editMemo(this.id, this.state.headline, this.state.details, this.status,
             this.state.remark, this.pub).then(data => {
                 let a = data.Table[0].Column1;
@@ -76,7 +119,12 @@ export default class editMemoView extends Component<Props> {
                         '编辑成功',
                         data.Table[0].Column2,
                         [
-                            { text: '确定', onPress: () => this.props.navigation.pop(2) },
+                            {
+                                text: '确定', onPress: () => {
+                                    DeviceEventEmitter.emit('memoUpdate', "jianting"); //发监听
+                                    this.props.navigation.pop(2);
+                                }
+                            },
                             // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
                             // {text: '其他', onPress: () => console.log('OK Pressed')},
                         ],

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { Button as AButton, Provider, Toast } from '@ant-design/react-native';
 //import AButton from '@ant-design/react-native/lib/button';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert, AsyncStorage } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, Image, View, Alert, AsyncStorage } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import qs from 'qs'
 
@@ -49,44 +49,32 @@ export default class companyLoginView extends Component<Props> {
     }
     render() {
         return (
-            <View style={styles.container}>
-                {/*{头像}*/}
-                <Image source={require('../img/companyLogin.jpg')} style={styles.iconStyle} />
-                {/*账号和密码*/}
-                <TextInput placeholder={'请输入企业编码'}
-                    clearButtonMode="while-editing"//只有在iOS系统有效
-                    style={styles.textInputStyle}
-                    //    value="cs"
-                    onChangeText={(companyCode) => this.setState({ companyCode })}
-                />
-                <TextInput placeholder={'请输入密码'}
-                    style={styles.textInputStyle}
-                    clearButtonMode="while-editing"//只有在iOS系统有效
-                    //    value="123456"
-                    onChangeText={(password) => this.setState({ password })}
-                    password={true}
-                    secureTextEntry={true}
-                />
-                {/*登录*/}
-                <View style={styles.loginBtnStyle}>
-                    <Button style={{ color: 'white' }} title="登录" onPress={this._onPressButton.bind(this)} />
+            <ScrollView style={{backgroundColor:'lightgray'}}>
+                <View style={styles.container}>
+                    {/*{头像}*/}
+                    <Image source={require('../img/companyLogin.jpg')} style={styles.iconStyle} />
+                    {/*账号和密码*/}
+                    <TextInput placeholder={'请输入企业编码'}
+                        clearButtonMode="while-editing"//只有在iOS系统有效
+                        style={styles.textInputStyle}
+                        //    value="cs"
+                        onChangeText={(companyCode) => this.setState({ companyCode })}
+                    />
+                    <TextInput placeholder={'请输入密码'}
+                        style={[styles.textInputStyle, { marginTop: 5 }]}
+                        clearButtonMode="while-editing"//只有在iOS系统有效
+                        //    value="123456"
+                        onChangeText={(password) => this.setState({ password })}
+                        password={true}
+                        secureTextEntry={true}
+                    />
+                    {/*登录*/}
+                    <View style={styles.loginBtnStyle}>
+                        <Button style={{ color: 'white' }} title="登录" onPress={this._onPressButton.bind(this)} />
+                    </View>
+                    {/* <AButton type='primary' size={'large'} style={{ margin: 16 }} >登陆antd</AButton> */}
                 </View>
-                <AButton type='primary' size={'large'} style={{ margin: 16 }} >登陆antd</AButton>
-
-                {/*设置*/}
-                <View style={styles.settingStyle}>
-                    <Text>无法登录</Text>
-                    <Text>新用户</Text>
-                    <Text>新用户8811</Text>
-                </View>
-                {/*三方登录方式*/}
-                <View style={styles.otherLoginStyle}>
-                    <Text>其他登录方式</Text>
-                    <Image source={require('../img/companyLogin.jpg')} style={styles.otherImageStyle}></Image>
-                    <Image source={require('../img/companyLogin.jpg')} style={styles.otherImageStyle}></Image>
-                    <Image source={require('../img/companyLogin.jpg')} style={styles.otherImageStyle}></Image>
-                </View>
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -96,7 +84,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         //  backgroundColor: '#F5FCFF',
-        backgroundColor: 'red',
+        backgroundColor: 'lightgray',
     },
     iconStyle: {
         width: 80,
@@ -116,7 +104,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         textAlign: 'center',
         paddingLeft: 15,
-        borderRadius: 8,
+        borderRadius: 6,
     },
     loginBtnStyle: {
         height: 40,

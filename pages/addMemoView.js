@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { ScrollView, StyleSheet, TouchableOpacity, TextInput, Image, View, Alert } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, TextInput, DeviceEventEmitter, View, Alert } from 'react-native';
 import { TextareaItem, Icon, PickerView } from '@ant-design/react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
@@ -51,31 +51,62 @@ export default class addMemoView extends Component<Props> {
         this.pub = 1;
     }
     _onPressButton() {
-        httpApi.addMemo(this.state.headline, this.state.details, this.status,
-            this.state.remark, this.pub).then(data => {
-                let a = data.Table[0].Column1;
-                if (a == 1000) {
-                    Alert.alert(
-                        '成功',
-                        data.Table[0].Column2,
-                        [
-                            { text: '确定', onPress: () => this.props.navigation.pop() },
-                            // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                            // {text: '其他', onPress: () => console.log('OK Pressed')},
-                        ],
-                        { cancelable: false }
-                    );
-                } else
-                    alert(data.Table[0].Column2);
-            });
+        const { navigation } = this.props;
+        const from = navigation.getParam('from', null);
+        const oderId = navigation.getParam('oderId', null);
+        if (from) { //从工单备忘录而来
+            httpApi.addOrderMemo(oderId, this.state.headline, this.state.details, this.status,
+                this.state.remark, this.pub).then(data => {
+                    let a = data.Table[0].Column1;
+                    if (a == 1000) {
+                        Alert.alert(
+                            '成功',
+                            data.Table[0].Column2,
+                            [
+                                {
+                                    text: '确定', onPress: () => {
+                                        DeviceEventEmitter.emit('memoUpdate', "jianting"); //发监听
+                                        this.props.navigation.pop();
+                                    }
+                                },
+                                // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                                // {text: '其他', onPress: () => console.log('OK Pressed')},
+                            ],
+                            { cancelable: false }
+                        );
+                    } else
+                        alert(data.Table[0].Column2);
+                });
+        } else  //从备忘录列表而来
+            httpApi.addMemo(this.state.headline, this.state.details, this.status,
+                this.state.remark, this.pub).then(data => {
+                    let a = data.Table[0].Column1;
+                    if (a == 1000) {
+                        Alert.alert(
+                            '成功',
+                            data.Table[0].Column2,
+                            [
+                                {
+                                    text: '确定', onPress: () => {
+                                        DeviceEventEmitter.emit('memoUpdate', "jianting"); //发监听;
+                                        this.props.navigation.pop();
+                                    }
+                                },
+                                // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                                // {text: '其他', onPress: () => console.log('OK Pressed')},
+                            ],
+                            { cancelable: false }
+                        );
+                    } else
+                        alert(data.Table[0].Column2);
+                });
     }
     render() {
-        const { navigation } = this.props;
-        const itemId = navigation.getParam('code', 'NO-ID');
+
         return (
             <ScrollView style={{ backgroundColor: 'lightgray' }}>
                 <View style={styles.container}>
-                    <TextInput style={[styles.textStyle, {marginTop:10, marginHorizontal: 10, width: width * 0.9, borderWidth: 1, backgroundColor: 'white', borderRadius: 6, borderColor: 'lightgray' }]
+                    <TextInput style={[styles.textStyle, { marginTop: 10, marginHorizontal: 10, width: width * 0.9, borderWidth: 1, backgroundColor: 'white', borderRadius: 6, borderColor: 'lightgray' }]
                     } placeholder={'请填写标题'} onChangeText={(value) => this.setState({ headline: value })} ></TextInput>
 
                     <TextareaItem style={[styles.textStyle, { marginHorizontal: 10, width: width * 0.9, borderWidth: 1, backgroundColor: 'white', borderRadius: 6, borderColor: 'lightgray' }]

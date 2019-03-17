@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
 
 import local from '../tools/storage'
 import httpApi from '../tools/api'
@@ -29,19 +29,19 @@ export default class userLoginView extends Component<Props> {
         //     console.log("get code:"+ code);
         // });
         //    httpApi.personLogin(this.state.userName, this.state.password)
-        httpApi.personLogin('cs', 'xl', '123456')
+        httpApi.personLogin('cs', 'yhj', '123456')
             .then((data) => {
                 let code = data.code;
                 if (code == 1000) {
-                    local.set("username", "xl");
+                    local.set("username", "yhj");
                     local.set("password", "123456");
                     local.set("uid", data.uId);
                     httpApi.saveLogin({
                         account: 'cs',
-                        username: 'xl',
+                        username: 'yhj',
                         password: '123456',
-                        // uid: 18
-                        uid: 15
+                        uid: 18
+                        // uid: 15
                     });
                     this.props.navigation.navigate('Main');
                 }
@@ -54,38 +54,28 @@ export default class userLoginView extends Component<Props> {
         const { navigation } = this.props;
         const itemId = navigation.getParam('code', 'NO-ID');
         return (
-            <View style={styles.container}>
-                {/*{头像}*/}
-                <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} />
-                {/*账号和密码*/}
-                <TextInput placeholder={'请输入用户名'}
-                    style={styles.textInputStyle}
-                    onChangeText={(userName) => this.setState({ userName })}
-                />
-                <TextInput placeholder={'请输入密码'}
-                    style={styles.textInputStyle}
-                    password={true}
-                    secureTextEntry={true}
-                    onChangeText={(password) => this.setState({ password })}
-                />
-                {/*登录*/}
-                <View style={styles.loginBtnStyle}>
-                    <Button style={{ color: 'white' }} title="登录" onPress={this._onPressButton.bind(this)} />
+            <ScrollView style={{ backgroundColor: 'lightgray' }}>
+                <View style={styles.container}>
+                    {/*{头像}*/}
+                    <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} />
+                    {/*账号和密码*/}
+                    <TextInput placeholder={'请输入用户名'}
+                        style={styles.textInputStyle}
+                        onChangeText={(userName) => this.setState({ userName })}
+                    />
+                    <TextInput placeholder={'请输入密码'}
+                        style={[styles.textInputStyle, { marginTop: 5 }]}
+                        password={true}
+                        secureTextEntry={true}
+                        onChangeText={(password) => this.setState({ password })}
+                    />
+                    {/*登录*/}
+                    <View style={styles.loginBtnStyle}>
+                        <Button style={{ color: 'white' }} title="登录" onPress={this._onPressButton.bind(this)} />
+                    </View>
+
                 </View>
-                {/*设置*/}
-                <View style={styles.settingStyle}>
-                    <Text>无法登录+ {JSON.stringify(itemId)}</Text>
-                    <Text>新用户</Text>
-                    <Text>新用户8811</Text>
-                </View>
-                {/*三方登录方式*/}
-                <View style={styles.otherLoginStyle}>
-                    <Text>其他登录方式</Text>
-                    <Image source={require('../img/userLogin.jpg')} style={styles.otherImageStyle}></Image>
-                    <Image source={require('../img/userLogin.jpg')} style={styles.otherImageStyle}></Image>
-                    <Image source={require('../img/userLogin.jpg')} style={styles.otherImageStyle}></Image>
-                </View>
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -95,7 +85,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         //  backgroundColor: '#F5FCFF',
-        backgroundColor: 'red',
+        backgroundColor: 'lightgray',
     },
     iconStyle: {
         width: 80,
@@ -115,7 +105,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         textAlign: 'center',
         paddingLeft: 15,
-        borderRadius: 8,
+        borderRadius: 6,
     },
     loginBtnStyle: {
         height: 40,

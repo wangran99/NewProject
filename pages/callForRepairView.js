@@ -60,7 +60,7 @@ export default class callForRepairView extends Component<Props> {
     }
 
     _onPressButton() {
-
+        this.props.navigation.navigate("OnlineService");
     }
     render() {
         let dt = this.state.data.Table[0];
@@ -154,7 +154,7 @@ export default class callForRepairView extends Component<Props> {
                                     this.state.dataRecord.Table && this.state.dataRecord.Table.length !== 0 ?
                                         <View style={{ marginVertical: 15, alignItems: 'center' }}>
                                             <View style={{ height: 1, width: width - 25, backgroundColor: 'lightgray' }}></View>
-                                            <Text style={{ alignSelf: 'center', marginTop: 5 }}>没有数据了</Text>
+                                            <Text style={{ alignSelf: 'center', marginTop: 15 }}>没有数据了</Text>
                                         </View> : null
                                 )
                             }}

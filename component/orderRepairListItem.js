@@ -12,7 +12,7 @@ export default class orderRepairListItem extends Component {
 
 
         let a = <Button type="outline" key={Math.random() * 100} title="备忘录" onPress={() =>
-            navigator.navigate("MemoList")
+            navigator.navigate("OrderMemoDetail", { orderId: data.id })
         }></Button>
         let b = <Button type="outline" key={Math.random() * 100} title="工单转派" onPress={() =>
             navigator.navigate("OrderTransfer", { orderId: data.id })
@@ -114,7 +114,7 @@ export default class orderRepairListItem extends Component {
                         <Text style={[styles.textStyle]}>工单状态:</Text>
                         <Text style={[styles.textStyle, { color: '#436EEE', fontSize: 20 }]}>{status}</Text>
                     </View>
-                    <View style={{ marginHorizontal: 10, marginVertical: 15, flexDirection: 'row', justifyContent:'flex-start' }}>
+                    <View style={{ marginHorizontal: 10, marginVertical: 15, flexDirection: 'row', justifyContent: 'flex-start' }}>
                         <Button type="outline" title="进入工单" onPress={() =>
                             navigator.navigate("OrderRepairDetail", { id: data.id })
                         }></Button>

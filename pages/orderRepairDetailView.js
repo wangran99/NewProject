@@ -171,8 +171,8 @@ export default class orderRepairDetailView extends Component<Props> {
                         <View style={{ height: 10, backgroundColor: 'lightgray' }}></View>
 
                         <View style={{ marginHorizontal: 10, marginTop: 5, marginBottom: 10, borderRadius: 8, backgroundColor: 'white' }}>
-                            {dt.orderstatus == 4 ? null : <Button type='outline' style={{ width: width * 0.8, marginVertical: 10 }}
-                                title='维修报告' onPress={() => this.props.navigation.navigate("AddOrderRepairReport", { orderId: this.state.data.Table[0].orderid })} />}
+                            {dt.orderstatus == 4 ? <Button type='outline' style={{ width: width * 0.8, marginVertical: 10 }}
+                                title='维修报告' onPress={() => this.props.navigation.navigate("AddOrderRepairReport", { orderId: this.state.data.Table[0].orderid })} /> : null}
                             <Text style={styles.textStyle}>维修历史记录：</Text>
                             <View style={{ height: 1, marginVertical: 10, backgroundColor: 'black' }}></View>
                             <FlatList

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { TouchableOpacity, StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, TextInput, Image, View, DeviceEventEmitter } from 'react-native';
 import { Carousel, Icon, SearchBar, } from '@ant-design/react-native';
 
 import local from '../tools/storage'
@@ -12,7 +12,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 var Dimensions = require('Dimensions');
 var width = Dimensions.get('window').width;
 
-var dataTest = { "Table": [{ "id": 48, "uid": 15, "oid": 0, "headline": "head", "details": "detail", "addtime": "2018/8/8 20:35:56", "is_read": 0, "state": 0, "remark": "啊咯", "ispub": 1 }] }
+var dataTest = { "Table": [{ "id": 48, "uid": 15, "oid": 0, "headline": "head", "details": "", "addtime": "2010/0/0 20:35:56", "is_read": 0, "state": 0, "remark": "啊咯", "ispub": 1 }] }
 type Props = {};
 export default class memoDetailView extends Component<Props> {
     static thiz = this;
@@ -32,7 +32,7 @@ export default class memoDetailView extends Component<Props> {
             //   headerTitle: <Icon name={"alert"} size="lg" />,
             headerRight: (
                 <TouchableOpacity onPress={() => {
-                    navigation.navigate("EditMemo")
+                    navigation.navigate("EditMemo", { memoid: navigation.getParam("id", null) })
                 }}>
                     <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <Icon name={"form"} size="lg" />
@@ -50,14 +50,30 @@ export default class memoDetailView extends Component<Props> {
             data: dataTest,
 
         };
-        const { navigation } = this.props;
-        this.id = navigation.getParam('id', 1);
+
     }
 
     componentDidMount() {
+        const { navigation } = this.props;
+        this.id = navigation.getParam('id', null);
+
+        this._getMemoDetail();
+
+        //收到监听
+        this.updateDetaillistener = DeviceEventEmitter.addListener('memoUpdate', (e) => {
+            this._getMemoDetail();
+        });
+    }
+    componentWillUnmount() {
+        // 移除监听 
+        this.updateDetaillistener.remove();
+    }
+    _getMemoDetail() {
         httpApi.memoDetail(this.id).then(data => {
-            this.setState({ data });
-            local.set("memoid", this.id);
+            if (JSON.stringify(data) != "{}") {
+                this.setState({ data });
+             
+            }
         });
     }
 

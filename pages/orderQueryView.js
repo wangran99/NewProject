@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { ScrollView, StyleSheet, Text, FlatList, TouchableOpacity, View, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Text, FlatList, TouchableOpacity, View, Image } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 import DatePicker from 'react-native-datepicker';
 
@@ -15,11 +15,9 @@ var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 
 var dataTest = {
-    "Table": [{
-        "rowId": 1, "id": 3, "addtime": "2019/3/7 20:46:03", "username": "", "beforekilometre": 10.00,
-        "beforetime": "2019/3/7 20:46:03", "beforeimg": "D884B0C33F8EBBCD40B22256FED1FB17.png", "Afterkilometre": "", "Aftertime": "", "Afterimg": "", "countkilometre": "", "status": 1, "state": 0
-    }, { "rowId": 2, "id": 2, "addtime": "2018/12/17 16:33:06", "username": "", "beforekilometre": 100.00, "beforetime": "2018/12/17 16:33:06", "beforeimg": "566906AD353AC366B18B4789CB6B703B.png", "Afterkilometre": "", "Aftertime": "", "Afterimg": "", "countkilometre": "", "status": 1, "state": 0 }],
-    "Table1": [{ "counts": 2, "pagecounts": 1 }], "Table2": [{ "Column1": "" }]
+    "Table": [],
+    "Table1": [{ "counts": 5, "pagecounts": 1 }],
+    "Table2": [{ "yjdd": 5, "ljje": 340.00, "ljjf": 21212.00 }]
 }
 type Props = {};
 export default class orderQueryView extends Component<Props> {
@@ -36,48 +34,63 @@ export default class orderQueryView extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            data:dataTest,
-            isRefreshing: false,
+            data: dataTest,
+            start: '',
+            end: '',
+            yjdd: 0,
+            ljje: 0,
+            ljjf: 0,
+            ljjf2: 0,
             // equipmentList: equipmentListTest,
         };
+        this.type = '';
+        this.pageIndex = 1;
     }
     _onPressButton() {
-        // Alert.alert('You tapped the button!'+local.get("code"));
-        // local.get('code').then((code) => {
-        //     console.log("get code:"+ code);
-        // });
-        //    httpApi.personLogin(this.state.userName, this.state.password)
-        httpApi.personLogin('yhj', '123456')
-            .then((response) => {
-                let code = response.data['data0'];
-                if (code == 1000) {
-                    let cookie = response.headers["Cookie"];
-                    local.set("cookie", cookie);
-                    this.props.navigation.navigate('Main');
+        this.pageIndex = 1;
+        this._getOrderBusinessStatistics();
+    }
+
+    _getOrderBusinessStatistics() {
+        httpApi.orderBusinessStatistics(this.pageIndex, this.state.start, this.state.end, this.type)
+            .then((data) => {
+                if (this.pageIndex == 1)
+                    this.setState({ data });
+                else if (this.pageIndex <= data.Table1[0].pagecounts) {
+                    let newArry = this.state.data.Table.concat(data.Table);
+                    this.state.data.Table = newArry;
+                    let newjson = JSON.parse(JSON.stringify(this.state.data));
+                    newjson.Table = newArry;
+                    this.setState({ data: newjson });
                 }
-                else
-                    Alert.alert('错误', JSON.stringify(data));
+                this.pageIndex++;
+
+                this.setState({
+                    yjdd: data.Table2[0].yjdd, ljje: data.Table2[0].ljje,
+                    ljjf: data.Table2[0].ljjf, ljjf2: data.Table2[0].ljjf2
+                });
             });
-        //   this.props.navigation.navigate('UserLogin');
+    }
+
+    componentDidMount() {
+        this._getOrderBusinessStatistics();
     }
     render() {
-        const { navigation } = this.props;
-        const itemId = navigation.getParam('code', 'NO-ID');
         return (
             <ScrollView>
                 <View style={styles.container}>
                     <View style={{ flex: 1, flexDirection: 'row', paddingTop: 10, paddingBottom: 20, backgroundColor: 'white' }}>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="已接工单" number="12" icon={"carry-out"} />
+                            <WorkInfoItem title="已接工单" number={this.state.yjdd} icon={"carry-out"} />
                         </View>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="累计金额" number="88888" icon={"dollar"} />
+                            <WorkInfoItem title="累计金额" number={this.state.ljje} icon={"dollar"} />
                         </View>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="累计积分" number="123" icon={"account-book"} />
+                            <WorkInfoItem title="累计积分" number={this.state.ljjf} icon={"account-book"} />
                         </View>
                         <View style={{ flex: 1, }} >
-                            <WorkInfoItem title="累计积分2" number="8" icon={"account-book"} />
+                            <WorkInfoItem title="累计积分2" number={this.state.ljjf2} icon={"account-book"} />
                         </View>
                         {/* <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} /> */}
                     </View>
@@ -87,25 +100,25 @@ export default class orderQueryView extends Component<Props> {
                             <Dropdown
                                 style={{}}
                                 label=' 请选择工单种类'
-                                value={"未完成"}
+                                textColor='black'
+                                value={"全部"}
                                 // value={this.state.selectedClientName}
-                                data={[{ value: '未完成', id: 0 }, { value: '已完成', id: 1 }]}
+                                data={[{ value: '全部', id: '' }, { value: '维修', id: 1 },
+                                { value: '送货', id: 2 }, { value: '安装', id: 0 }]}
                                 onChangeText={(value, index, data) => {
-                                    this.status = index;
+                                    this.type = data[index].id;
+                                    this._onPressButton();
                                 }} />
                         </View>
                     </View>
                     <View style={[{ flexDirection: 'row', marginLeft: 3, alignItems: 'center' }]}>
-                        {/* <Text style={[styles.textStyle]}>采购时间:</Text> */}
-                        {/* <Text style={[styles.textStyle]}>{this.state.data.Table[0].parentsNumber10 < 0 ? "超出" + Math.abs(this.state.data.Table[0].parentsNumber10) + "天" : this.state.data.Table[0].parentsNumber10 + "天"}</Text> */}
-                        {/* <TextInput style={[styles.textInputStyle,]} value={this.state.purchase}
-                            placeholder={"选填"} onChangeText={(value) => this.setState({ purchase: value })}></TextInput> */}
                         <TouchableOpacity>
                             <DatePicker
                                 style={{ marginVertical: 5, }}
                                 date={this.state.start}
+                                // date={'2018-11-11'}
                                 mode='date'
-                                // placeholder='请选择时间'
+                                placeholder='请选择起始时间'
                                 minDate="2018-01-01"
                                 maxDate="2050-01-01"
                                 format='YYYY-MM-DD'      //这里定义时间的样式
@@ -164,23 +177,23 @@ export default class orderQueryView extends Component<Props> {
                             />
                         </TouchableOpacity>
                         <View style={{ marginHorizontal: 2 }} >
-                            <Button title='搜索'></Button>
+                            <Button title='搜索' onPress={this._onPressButton.bind(this)}></Button>
                         </View>
                     </View>
                     <FlatList
                         style={{ flex: 1, }}
                         // refreshing={this.state.isRefreshing}
                         // onRefresh={this._refreshProjectList.bind(this)}
-                        // onEndReached={this.isRefreshing.bind(this)} 
-                        // onEndReachedThreshold={0.1}
-                        initialNumToRender={5}
+                        onEndReached={this._getOrderBusinessStatistics.bind(this)}
+                        onEndReachedThreshold={0.1}
+                        initialNumToRender={10}
                         ListEmptyComponent={() => {
                             return (
                                 <TouchableOpacity
                                     style={{ flex: 1 }}
                                     // onPress={() => this._refreshProjectList()}
                                     activeOpacity={0.3}>
-                                    <View style={{ flex: 1, height: height - 65, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', marginTop: 1, marginBottom: 20 }}>
+                                    <View style={{ flex: 1, height: height / 2 + 30, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', marginTop: 1, marginBottom: 20 }}>
                                         {/* <View style={{ flex: 1, backgroundColor: 'lightgray' }}></View> */}
                                         <Image style={{
                                             width: 80,

@@ -43,6 +43,8 @@ var OrderMemoDetailView = require('./pages/orderMemoDetailView')
 var EditMemoView = require('./pages/editMemoView')
 var OrderRepairView = require('./pages/orderRepairView')
 var OrderRepairDetailView = require('./pages/orderRepairDetailView')
+var OrderDeliveryDetailView = require('./pages/orderDeliveryDetailView')
+
 var OrderRepairReplenishView = require('./pages/orderRepairReplenishView')
 var AddOrderRepairReportView = require('./pages/addOrderRepairReportView')
 var OrderDeliveryView = require('./pages/orderDeliveryView')
@@ -50,6 +52,8 @@ var OrderDeliveryReplenishView = require('./pages/orderDeliveryReplenishView')
 var OrderInstallView = require('./pages/orderInstallView')
 var OrderInstallDetailView = require('./pages/orderInstallDetailView')
 var OrderInstallReplenishView = require('./pages/orderInstallReplenishView')
+var OrderListDaiPaiView = require('./pages/orderListDaiPaiView')
+
 var CallForRepairView = require('./pages/callForRepairView')
 var OnlineServiceView = require('./pages/onlineServiceView')
 var OnlineServiceReplenishView = require('./pages/onlineServiceReplenishView')
@@ -99,10 +103,12 @@ const AppStack = createStackNavigator(
     OrderRepairReplenish: OrderRepairReplenishView,
     AddOrderRepairReport: AddOrderRepairReportView,
     OrderDelivery: OrderDeliveryView,
+    OrderDeliveryDetail: OrderDeliveryDetailView,
     OrderDeliveryReplenish: OrderDeliveryReplenishView,
     OrderInstall: OrderInstallView,
     OrderInstallDetail: OrderInstallDetailView,
     OrderInstallReplenish: OrderInstallReplenishView,
+    OrderListDaiPai: OrderListDaiPaiView,
     CallForRepair: CallForRepairView,
     OnlineService: OnlineServiceView,
     onlineServiceReplenish: OnlineServiceReplenishView,

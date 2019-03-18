@@ -40,6 +40,11 @@ class httpapi {
         return postData("/Order.asmx/ReceiveOrderPai");
     }
 
+    // 业务员派单列表
+    static getOrderListDaiPai(count) {
+        return postData("/Order.asmx/OrderListDaiPai", { count });
+    }
+
     static getOrderDetails(orderid) {
         return postData("/Order.asmx/OrderDetails", { orderid });
     }
@@ -221,6 +226,11 @@ class httpapi {
         return postData("/Order.asmx/OrderReplenish", { orderId, facilitycode, ordertype, describe, phone, orderamount });
     }
 
+    //送货补充工单
+    static ordeDeliveryrReplenish(orderId, clientid, describe, phone, money, integral, integralex, rectype) {
+        return postData("/Order.asmx/OrderReplenishSongHuo", { orderId, clientid, describe, phone, money, integral, integralex, rectype });
+    }
+
     //添加工单维修报告
     static addOrderServiceReport(orderid, solution, replace, address, phenomena, handling,
         jthandling, feedback, peice, integral, integralex, rectype, img) {
@@ -229,6 +239,11 @@ class httpapi {
             feedback, peice, integral, integralex, rectype, img
         });
     }
+
+    static orderBusinessStatistics(count, starttime, endtime, ordertype) {
+        return postData("/Order.asmx/OrderBusinessStatistics", { count, starttime, endtime, ordertype });
+    }
+
     static updateUserPhone(userphone) {
         return postData("/commList.asmx/UserUpdatePhone", { userphone });
     }

@@ -17,9 +17,9 @@ export default class orderInstallListItem extends Component {
         let b = <Button type="outline" key={Math.random() * 100} title="工单转派" onPress={() =>
             navigator.navigate("OrderTransfer", { orderId: data.id })
         }></Button>
-        let c = <Button type="outline" key={Math.random() * 100} title="补充工单" onPress={() =>
-            navigator.navigate("OrderTransfer", { orderId: data.id })
-        }></Button>
+        // let c = <Button type="outline" key={Math.random() * 100} title="补充工单" onPress={() =>
+        //     navigator.navigate("OrderTransfer", { orderId: data.id })
+        // }></Button>
 
         let buttonGroup = [];
         let status = '';

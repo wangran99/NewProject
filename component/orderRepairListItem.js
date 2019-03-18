@@ -18,7 +18,7 @@ export default class orderRepairListItem extends Component {
             navigator.navigate("OrderTransfer", { orderId: data.id })
         }></Button>
         let c = <Button type="outline" key={Math.random() * 100} title="补充工单" onPress={() =>
-            navigator.navigate("OrderTransfer", { orderId: data.id })
+            navigator.navigate("OrderRepairReplenish", { id: data.id })
         }></Button>
 
         let buttonGroup = [];

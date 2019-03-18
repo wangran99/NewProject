@@ -38,10 +38,10 @@ export default class orderRepairDetailView extends Component<Props> {
         };
 
         return {
-            title: '工单详情',
+            title: '维修工单详情',
             //   headerTitle: <Icon name={"alert"} size="lg" />,
             headerRight: (
-                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera", { from: "orderRepairDetailView" }); }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera", { from: "orderRepairDetailView", id: navigation.getParam('id', 1) }); }}>
                     <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 20, color: 'white' }}>签到</Text>
                         <Icon name={"scan"} size="lg" />

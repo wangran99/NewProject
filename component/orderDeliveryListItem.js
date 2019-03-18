@@ -20,7 +20,7 @@ export default class orderDeliveryListItem extends Component {
         // let a = <Button type="outline" title="取消工单" onPress={() =>
         //     navigator.navigate("CancelOrder", { orderId: data.id })}></Button>
         let a = <Button type="outline" key={Math.random() * 100} title="备忘录" onPress={() =>
-            navigator.navigate("MemoList")
+            navigator.navigate("OrderMemoDetail", { orderId: data.id })
         }></Button>
         let b = <Button type="outline" key={Math.random() * 100} title="补充工单" onPress={() =>
             navigator.navigate("OrderDeliveryReplenish", { orderId: data.id })
@@ -110,10 +110,10 @@ export default class orderDeliveryListItem extends Component {
                     </View>
                     <View style={{ marginHorizontal: 10, marginVertical: 15, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Button type="outline" title="进入工单" onPress={() =>
-                            navigator.navigate("OrderRepairDetail", { id: data.id })
+                            navigator.navigate("OrderDeliveryDetail", { id: data.id })
                         }></Button>
                         {buttonGroup}
-                        {b}
+                        {/* {b} */}
                     </View>
                 </View>
             </TouchableOpacity>

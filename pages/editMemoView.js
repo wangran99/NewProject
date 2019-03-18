@@ -74,7 +74,7 @@ export default class editMemoView extends Component<Props> {
                 this.id = data.Table[0].id;
             });
         else
-            httpApi.memoDetail(memoid).then(data => {
+            httpApi.memoDetail(this.id).then(data => {
                 this.setState({
                     headline: data.Table[0].headline,
                     details: data.Table[0].details,
@@ -87,52 +87,52 @@ export default class editMemoView extends Component<Props> {
             });
     }
     _onPressButton() {
-        // if (this.from)
-        //     httpApi.addOrderMemo(this.oderId, this.state.headline, this.state.details, this.status,
-        //         this.state.remark, this.pub).then(data => {
-        //             let a = data.Table[0].Column1;
-        //             if (a == 1000) {
-        //                 Alert.alert(
-        //                     '成功',
-        //                     data.Table[0].Column2,
-        //                     [
-        //                         {
-        //                             text: '确定', onPress: () => {
-        //                                 DeviceEventEmitter.emit('memoUpdate', "jianting"); //发监听
-        //                                 this.props.navigation.pop();
-        //                             }
-        //                         },
-        //                         // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        //                         // {text: '其他', onPress: () => console.log('OK Pressed')},
-        //                     ],
-        //                     { cancelable: false }
-        //                 );
-        //             } else
-        //                 alert(data.Table[0].Column2);
-        //         });
-        // else
-        httpApi.editMemo(this.id, this.state.headline, this.state.details, this.status,
-            this.state.remark, this.pub).then(data => {
-                let a = data.Table[0].Column1;
-                if (a == 1000) {
-                    Alert.alert(
-                        '编辑成功',
-                        data.Table[0].Column2,
-                        [
-                            {
-                                text: '确定', onPress: () => {
-                                    DeviceEventEmitter.emit('memoUpdate', "jianting"); //发监听
-                                    this.props.navigation.pop(2);
-                                }
-                            },
-                            // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                            // {text: '其他', onPress: () => console.log('OK Pressed')},
-                        ],
-                        { cancelable: false }
-                    );
-                } else
-                    alert(data.Table[0].Column2);
-            });
+        if (this.from)
+            httpApi.addOrderMemo(this.oderId, this.state.headline, this.state.details, this.status,
+                this.state.remark, this.pub).then(data => {
+                    let a = data.Table[0].Column1;
+                    if (a == 1000) {
+                        Alert.alert(
+                            '成功',
+                            data.Table[0].Column2,
+                            [
+                                {
+                                    text: '确定', onPress: () => {
+                                        DeviceEventEmitter.emit('memoUpdate', "jianting"); //发监听
+                                        this.props.navigation.pop();
+                                    }
+                                },
+                                // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                                // {text: '其他', onPress: () => console.log('OK Pressed')},
+                            ],
+                            { cancelable: false }
+                        );
+                    } else
+                        alert(data.Table[0].Column2);
+                });
+        else
+            httpApi.editMemo(this.id, this.state.headline, this.state.details, this.status,
+                this.state.remark, this.pub).then(data => {
+                    let a = data.Table[0].Column1;
+                    if (a == 1000) {
+                        Alert.alert(
+                            '编辑成功',
+                            data.Table[0].Column2,
+                            [
+                                {
+                                    text: '确定', onPress: () => {
+                                        DeviceEventEmitter.emit('memoUpdate', "jianting"); //发监听
+                                        this.props.navigation.pop(2);
+                                    }
+                                },
+                                // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                                // {text: '其他', onPress: () => console.log('OK Pressed')},
+                            ],
+                            { cancelable: false }
+                        );
+                    } else
+                        alert(data.Table[0].Column2);
+                });
     }
     render() {
 

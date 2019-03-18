@@ -120,28 +120,34 @@ export default class mainView extends Component<Props> {
             // 创建ListView datasource数据源
             announcement: announcementTest,
             orderList: orderListTest,
+            //业务统计的四个数据
+            yjdd: 0,
+            ljje: 0,
+            ljjf: 0,
+            ljjf2: 0,
+
             isRefreshing: false,
 
         };
 
     }
-
+    _getOrderBusinessStatistics() {
+        httpApi.orderBusinessStatistics(1, '', '', '')
+            .then((data) => {
+                this.setState({
+                    yjdd: data.Table2[0].yjdd, ljje: data.Table2[0].ljje,
+                    ljjf: data.Table2[0].ljjf, ljjf2: data.Table2[0].ljjf2
+                });
+            });
+    }
     componentDidMount() {
-        // this._navListener = this.props.navigation.addListener('didFocus', () => {
-        //     StatusBar.setBarStyle('light-content');
-        //     isAndroid && StatusBar.setBackgroundColor('#6a51ae');
-        //   });
-
-        console.log("componentDidMount1111");
-        // httpApi.getAnnouncement().then((data) => {
-        //     Alert.alert('错误', JSON.stringify(data));
-        //  });
         httpApi.getPersonInfo().then((personInfo) => {
             // Alert.alert('person name:' + personInfo.Table[0].jobnumber, JSON.stringify(personInfo));
             this.setState({ personInfo })
         });
         this._refreshAnnouncement();
         this.getOrderList();
+        this._getOrderBusinessStatistics();
         //收到监听
         this.updateOderListlistener = DeviceEventEmitter.addListener('orderList', (e) => {
             this.getOrderList();
@@ -232,7 +238,7 @@ export default class mainView extends Component<Props> {
                     }}
                     ListFooterComponent={() => {
                         return (
-                            this.state.announcement.Table.length !== 0 ?
+                            this.state.announcement.Table && this.state.announcement.Table.length !== 0 ?
                                 <View style={{ marginTop: 30, marginBottom: 25 }}>
                                     <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
                                     <Text style={{ alignSelf: 'center', marginTop: 20 }}>没有数据了</Text>
@@ -268,6 +274,7 @@ export default class mainView extends Component<Props> {
     }
     clear() {
         this.setState({ keys: '' });
+        this._refreshAnnouncement();
         Keyboard.dismiss;
     }
     _refreshAnnouncement() {
@@ -410,6 +417,8 @@ export default class mainView extends Component<Props> {
             this.props.navigation.navigate("OrderDelivery");
         else if (index == 10)
             this.props.navigation.navigate("OrderInstall");
+        else if (index == 11)
+            this.props.navigation.navigate("OrderListDaiPai");
     }
     renderMyView() {
         const list = [
@@ -440,16 +449,16 @@ export default class mainView extends Component<Props> {
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', marginTop: 10, marginBottom: 10 }}>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="已接工单" number="12" icon={"carry-out"} onPress={this._onPressMyGridItem.bind(this, 0)} />
+                            <WorkInfoItem title="已接工单" number={this.state.yjdd} icon={"carry-out"} onPress={this._onPressMyGridItem.bind(this, 0)} />
                         </View>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="累计金额" number="100" icon={"dollar"} onPress={this._onPressMyGridItem.bind(this, 1)} />
+                            <WorkInfoItem title="累计金额" number={this.state.ljje} icon={"dollar"} onPress={this._onPressMyGridItem.bind(this, 1)} />
                         </View>
                         <View style={{ flex: 1, marginRight: 1 }} >
-                            <WorkInfoItem title="累计积分" number="123" icon={"account-book"} onPress={this._onPressMyGridItem.bind(this, 2)} />
+                            <WorkInfoItem title="累计积分" number={this.state.ljjf} icon={"account-book"} onPress={this._onPressMyGridItem.bind(this, 2)} />
                         </View>
                         <View style={{ flex: 1, }} >
-                            <WorkInfoItem title="累计积分2" number="8" icon={"account-book"} onPress={this._onPressMyGridItem.bind(this, 3)} />
+                            <WorkInfoItem title="累计积分2" number={this.state.ljjf2} icon={"account-book"} onPress={this._onPressMyGridItem.bind(this, 3)} />
                         </View>
                         {/* <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} /> */}
                     </View>
@@ -523,6 +532,7 @@ export default class mainView extends Component<Props> {
             title = "个人中心";
         this.props.navigation.setParams({
             title: title,
+            headerRight: null
         });
 
         if (tabName === 'workTab')

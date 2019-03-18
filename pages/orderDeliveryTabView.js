@@ -98,7 +98,7 @@ export default class orderDeliveryTabView extends Component<Props> {
                 renderItem={({ item }) => <OrderDeliveryListItem data={item} navigator={navig} style={{ marginTop: 5 }}
                     onPress={() => {
                         let a = 1;
-                        navig.navigate("OrderRepairDetail", { id: item.id })
+                        navig.navigate("OrderDeliveryDetail", { id: item.id })
                     }} />}
                 removeClippedSubviews={true}
             />

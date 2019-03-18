@@ -13,8 +13,8 @@ var width = Dimensions.get('window').width;
 
 var dataTest = {
     "Table": [{
-        "sl": 1, "facilitycode": "8000078", "equipmentid": 24, "classift": "电脑",
-        "brand": "联想", "model": "4650", "clientid": 11, "name": "杭州共基网络科技有限公司", "address": "江干区"
+        "sl": 1, "facilitycode": "", "equipmentid": 24, "classift": "",
+        "brand": "", "model": "", "clientid": 11, "name": "", "address": ""
     }],
     "Table1": [{ "id": 187, "issuetime": "2019/3/7 15:19:14", "phone": "121212366", "describe": "但是", "ordertype": 1 }],
     "Table2": [{ "Column1": 1 }]
@@ -40,39 +40,72 @@ export default class orderRepairReplenishView extends Component<Props> {
             amount: '',
         };
         const { navigation } = this.props;
-        const data = navigation.getParam('data', 1);
-        const queary = this._quearyParam(data.data);
-        this.code = queary.code;
-        this.clientid = queary.clientid;
+        this.orderId = navigation.getParam('id', '');
+        // const queary = this._quearyParam(data.data);
+        // this.code = queary.code;
+        // this.clientid = queary.clientid;
     }
-    _quearyParam(url) {
-        var result = {};
-        var query = url.split("?")[1];
-        var queryArr = query.split("&");
-        queryArr.map((item) => {
-            var key = item.split("=")[0];
-            var value = item.split("=")[1];
-            result[key] = value;
+    // _quearyParam(url) {
+    //     var result = {};
+    //     var query = url.split("?")[1];
+    //     var queryArr = query.split("&");
+    //     queryArr.map((item) => {
+    //         var key = item.split("=")[0];
+    //         var value = item.split("=")[1];
+    //         result[key] = value;
+    //     });
+    //     return result;
+    // }
+    componentDidMount() {
+        httpApi.getOrderDetails(this.orderId).then(data => {
+            let a = data;
+            this.setState({ data });
         });
-        return result;
     }
     _onPressButton() {
-        httpApi.orderReplenish('yhj', '123456')
-            .then((response) => {
-                let code = response.data['data0'];
+        let dt = this.state.data.Table[0];
+        httpApi.orderReplenish(this.orderId, dt.facilitycode, dt.ordertype, this.state.describe,
+            this.state.phone, this.state.amount)
+            .then((data) => {
+                // console.warn("repair:" + JSON.stringify(data));
+                let code = data.Table[0].Column1;
                 if (code == 1000) {
-                    let cookie = response.headers["Cookie"];
-                    local.set("cookie", cookie);
-                    this.props.navigation.navigate('Main');
+                    Alert.alert(
+                        '成功',
+                        data.Table[0].Column2,
+                        [
+                            {
+                                text: '确定', onPress: () => {
+                                    this.props.navigation.pop();
+                                }
+                            },
+                            // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                            // {text: '其他', onPress: () => console.log('OK Pressed')},
+                        ],
+                        { cancelable: false }
+                    );
                 }
                 else
-                    Alert.alert('错误', JSON.stringify(data));
+                    Alert.alert('错误', JSON.stringify(data.Table[0].Column2));
             });
         //   this.props.navigation.navigate('UserLogin');
     }
     render() {
+        let dt = this.state.data.Table[0];
+        let type = '';
+        if (dt.ordertype == 0) {
+            type = "安装";
+        }
+        else if (dt.ordertype == 3) {
+            type = "临修";
+        }
+        else if (dt.ordertype == 1) {
+            type = "维修";
+        } else {
+            type = "送货";
+        }
         return (
-            <KeyboardAwareScrollView keyboardShouldPersistTaps='always'>
+            <KeyboardAwareScrollView keyboardShouldPersistTaps='always' style={{ backgroundColor: 'lightgray' }}>
                 <View style={styles.container}>
                     <View style={[styles.textRowStyle, { flexDirection: 'row' }]}>
                         <Text style={styles.textStyle}>设备编号：</Text>
@@ -80,7 +113,7 @@ export default class orderRepairReplenishView extends Component<Props> {
                     </View>
                     <View style={[styles.textRowStyle, { flexDirection: 'row' }]}>
                         <Text style={styles.textStyle}>工单种类：</Text>
-                        <Text style={styles.textStyle}>{this.state.data.Table[0].orderlevel == 1 ? "加急" : "普通"}</Text>
+                        <Text style={styles.textStyle}>{type}</Text>
                     </View>
                     <View style={[styles.textRowStyle, { flexDirection: 'row' }]}>
                         <Text style={styles.textStyle}>客户名称：</Text>
@@ -105,7 +138,7 @@ export default class orderRepairReplenishView extends Component<Props> {
                     </View>
                     <View style={[styles.textRowStyle, { flexDirection: 'row' }]}>
                         <Text style={styles.textStyle}>接单时间：</Text>
-                        <Text style={styles.textStyle}>{this.state.data.Table1[0].issuetime}</Text>
+                        <Text style={styles.textStyle}>{this.state.data.Table[0].ordertime}</Text>
                     </View>
                     <View style={[styles.textRowStyle, { marginVertical: 1, flexDirection: 'row', alignItems: 'center' }]}>
                         <Text style={styles.textStyle}>问题描述：</Text>
@@ -123,7 +156,7 @@ export default class orderRepairReplenishView extends Component<Props> {
                         <TextInput style={[styles.textStyle, { flex: 1, backgroundColor: 'white', borderRadius: 6 }]} value={this.state.amount}
                             onChangeText={(amount) => this.setState({ amount })} keyboardType='numeric'></TextInput>
                     </View>
-                    <View style={{ marginVertical: 10, marginHorizontal: 10 }} >
+                    <View style={{ marginVertical: 20, marginHorizontal: 10 }} >
                         <Button style={{ width: width * 0.85, }} title='保存' onPress={this._onPressButton.bind(this)}></Button>
                     </View>
                 </View>

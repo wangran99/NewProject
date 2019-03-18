@@ -41,7 +41,7 @@ export default class orderInstallDetailView extends Component<Props> {
             title: '安装工单详情',
             //   headerTitle: <Icon name={"alert"} size="lg" />,
             headerRight: (
-                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera", { from: "orderInstallDetailView" }); }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera", { from: "orderInstallDetailView", id: navigation.getParam('id', '') }); }}>
                     <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 20, color: 'white' }}>签到</Text>
                         <Icon name={"scan"} size="lg" />

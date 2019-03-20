@@ -13,14 +13,9 @@ var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 
 var dataTest = {
-    "Table": [{
-        "id": 24, "facilitycode": "11111", "assetnumber": "无", "clientid": 11,
-        "name": "", "address": "111", "doorplate": "11", "classift": "11",
-        "brand": "11", "model": "4650", "purchase": "1900/1/1 0:00:00", "upkeep": 0, "contacts": "", "orderid": 187,
-        "ordertime": "2019/3/7 15:20:15", "phone": "121212366", "describe": "11", "orderamount": 1.00,
-        "orderstatus": 3, "ordertype": 1, "cause": "12", "orderlevel": 0
-    }]
-};
+    "Table": [{ "sl": 1, "equipmentid": 36, "clientid": 12, "facilitycode": "8000052", "name": "台州杰士达办公设备有限公司", "address": "双水路", "classift": "工", "brand": "L", "model": "22", "doorplate": "30", "remark": "", "purchase": "1900/1/1 0:00:00", "assetnumber": "", "webbaoxiu": 0 }], "Table1": [{ "id": 81, "orderid": 152, "phenomena": "", "handling": "", "jthandling": "", "feedback": "", "peice": 0.00, "addtime": "2019/1/7 12:15:12", "doorplate": "30" }, { "id": 63, "orderid": 119, "phenomena": "无", "handling": "1", "jthandling": "1", "feedback": "0", "peice": 1.00, "addtime": "2018/12/17 20:41:43", "doorplate": "30" }],
+    "Table2": [{ "id": 1, "c_Name": "浙江省测试用户科技有限公司", "c_tel": "0571-88888888", "c_addr": "浙江省测试路18号", "tag": 0, "c_icon": "F2A0F7890A7955D8F040EBE59A7591CD.png", "c_print_title": "测试公司销售清单", "c_print_intro": "附注内容\r\n 本销售单的全部内容经双方认可，购买单位经办人已经对本单销售货物的名称、型号、数量验收合格，并承诺7天内结清货款。购买单位逾期付款总额的1%向本单位支付违约金，经办人自愿承担连带偿还货款以及由此引起的相关法律责任。发生争议协商不成时，双方一致同意向法院起诉。\r\n地址： 测试公司地址     电话88888888    投诉：8888888", "c_open_url": "https:\/\/www.baidu.com\/", "c_open_name": "测试用户网上商城", "baoxiu_status": 0, "c_imgBg": "131930715104678101.jpg", "c_imgLogo": "131930533534676809.jpg", "c_logoTop": "65", "c_logoLeft": "210", "printMaxId": "", "c_logowidth": "72", "c_logoSize": "1" }]
+}
 var dataRecordTest = {
     "Table": [{ "orderid": 94, "facilitycode": "", "issuetime": "2011/11/1 11:11:", "phenomena": "111", "handling": "111", "jthandling": "111", "orderstatus": 5 },
     ]
@@ -46,40 +41,36 @@ export default class callForRepairView extends Component<Props> {
         super(props);
         this.state = {
             data: dataTest,
-            dataRecord: dataRecordTest,
+            datarecord: dataRecordTest,
         };
     }
 
+    _quearyParam(url) {
+        var result = {};
+        var query = url.split("?")[1];
+        var queryArr = query.split("&");
+        queryArr.map((item) => {
+            var key = item.split("=")[0];
+            var value = item.split("=")[1];
+            result[key] = value;
+        });
+        return result;
+    }
     componentDidMount() {
         const { navigation } = this.props;
-        const id = navigation.getParam('id', 1);
-        httpApi.getOrderDetails(id).then(data => {
+        const data = navigation.getParam('data', 1);
+        const queary = this._quearyParam(data.data);
+        this.code = queary.code;
+        this.clientid = queary.clientid;
+        httpApi.getBarCodeInfo(this.code).then(data => {
             this.setState({ data });
-            return httpApi.getOrderRecord(data.Table[0].id);
-        }).then(data => this.setState({ dataRecord: data }))
+        });
     }
 
     _onPressButton() {
-        this.props.navigation.navigate("OnlineService");
+        this.props.navigation.navigate("OnlineService", { data: this.state.data });
     }
     render() {
-        let dt = this.state.data.Table[0];
-        let type = '';
-        if (dt.ordertype == 0) {
-            type = "安装";
-        }
-        else if (dt.ordertype == 3) {
-            type = "临修";
-        }
-        else if (dt.ordertype == 1) {
-            type = "维修";
-        } else {
-            type = "送货";
-        }
-
-        let status = (dt.orderstatus == 0 && "未派单" || dt.orderstatus == 1 && "1已派单" || dt.orderstatus == 2 && "已取消"
-            || dt.orderstatus == 3 && "已接单" || dt.orderstatus == 4 && "已到达（处理中）" || dt.orderstatus == 5 && "已完成"
-            || dt.orderstatus == 6 && "未解决" || dt.orderstatus == 7 && "送修中");
 
         return (
             <ScrollView>
@@ -112,7 +103,7 @@ export default class callForRepairView extends Component<Props> {
                         </View>
                         <View style={[styles.textRowStyle, { flexDirection: 'row' }]}>
                             <Text style={styles.textStyle}>购买日期：</Text>
-                            <Text style={styles.textStyle}>{this.state.data.Table[0].ordertime}</Text>
+                            <Text style={styles.textStyle}>{this.state.data.Table[0].purchase}</Text>
                         </View>
                         <View style={{ marginVertical: 20, marginHorizontal: 10 }} >
                             <Button style={{ width: width * 0.85, }} title='在线召唤服务' onPress={this._onPressButton.bind(this)}></Button>
@@ -139,31 +130,31 @@ export default class callForRepairView extends Component<Props> {
                                                 width: 80,
                                                 height: 80,
                                             }} source={require('../img/refresh.jpg')}></Image>
-                                            <Text style={{ marginBottom: 20, fontSize: 20 }}>请点击或下拉刷新</Text>
+                                            <Text style={{ marginBottom: 20, fontSize: 20 }}>没有记录</Text>
                                         </View>
                                     </TouchableOpacity>
                                 )
                             }}
                             ItemSeparatorComponent={() => {
                                 return (
-                                    <View style={{ height: 1, backgroundColor: 'lightgray' }}></View>
+                                    <View style={{ height: 6, backgroundColor: 'lightgray' }}></View>
                                 )
                             }}
                             ListFooterComponent={() => {
                                 return (
-                                    this.state.dataRecord.Table && this.state.dataRecord.Table.length !== 0 ?
+                                    this.state.data && this.state.data.Table1 && this.state.data.Table1.length !== 0 ?
                                         <View style={{ marginVertical: 15, alignItems: 'center' }}>
                                             <View style={{ height: 1, width: width - 25, backgroundColor: 'lightgray' }}></View>
                                             <Text style={{ alignSelf: 'center', marginTop: 15 }}>没有数据了</Text>
                                         </View> : null
                                 )
                             }}
-                            data={this.state.dataRecord.Table}
-                            keyExtractor={(item, index) => { return "index" + item.id }}
+                            data={this.state.data.Table1}
+                            keyExtractor={(item, index) => { return "index" + item.orderid }}
                             renderItem={({ item }) => <CallForRepairListItem data={item} style={{ margin: 22 }}
                                 onPress={() => {
-                                    // let a = 1;
-                                    // this.props.navigation.navigate('ProjectProcess', { id: item.id });
+                                    let a = 1;
+                                    this.props.navigation.navigate('onlineServiceReplenish', { id: item.orderid });
                                 }} />}
                             removeClippedSubviews={true}
                         />

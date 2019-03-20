@@ -57,7 +57,7 @@ export default class userLoginView extends Component<Props> {
             <ScrollView style={{ backgroundColor: 'lightgray' }}>
                 <View style={styles.container}>
                     {/*{头像}*/}
-                    <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} />
+                    <Image source={require('../img/user.jpg')} style={styles.iconStyle} />
                     {/*账号和密码*/}
                     <TextInput placeholder={'请输入用户名'}
                         style={styles.textInputStyle}

@@ -240,10 +240,46 @@ class httpapi {
         });
     }
 
+    //派单转为抢单
+    static ordePaiToQiang(ids) {
+        return postData("/Order.asmx/OrderPaiToQiang", { ids });
+    }
+
+    //增加新工单
+    static orderAddNull(orderreceiving, ordertype, orderlevel, orderNum, clientid, phone, cause, describe) {
+        return postData("/Order.asmx/OrderAddNull", { orderreceiving, ordertype, orderlevel, orderNum, clientid, phone, cause, describe });
+    }
+
     static orderBusinessStatistics(count, starttime, endtime, ordertype) {
         return postData("/Order.asmx/OrderBusinessStatistics", { count, starttime, endtime, ordertype });
     }
+    // 根据二维码获取设备订单维修信息
+    static getBarCodeInfo(code) {
+        return postData("/Company.asmx/CodeInfo", { code });
+    }
+    //扫描二维码报修。code：设备code
+    static postBaoXiu(code, phone, describe, img) {
+        return postData("/Company.asmx/BaoXiu", { code, phone, describe, img });
+    }
 
+    //扫描二维码报修后的补充工单。
+    static postOrderReplenish(orderId, facilitycode, ordertype, describe, phone, orderamount) {
+        return postData("/Order.asmx/OrderReplenish", { orderId, facilitycode, ordertype, describe, phone, orderamount });
+    }
+    //员工动态
+    static orderStatUsers() {
+        return postData("/Order.asmx/OrderStatUsers", {});
+    }
+
+    //未完成工单
+    static OrderListUnFinished() {
+        return postData("/Order.asmx/OrderListUnFinished", {});
+    }
+
+    //获取首页未读消息列表
+    static getIndexNewNum() {
+        return postData("/commList.asmx/IndexNewNum", {});
+    }
     static updateUserPhone(userphone) {
         return postData("/commList.asmx/UserUpdatePhone", { userphone });
     }

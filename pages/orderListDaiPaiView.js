@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { Icon } from '@ant-design/react-native';
 
-import { FlatList, StyleSheet, Text, TouchableOpacity, Image, View, Alert } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, Image, View, DeviceEventEmitter } from 'react-native';
 
 import local from '../tools/storage'
 import httpApi from '../tools/api'
@@ -33,10 +33,10 @@ export default class orderListDaiPaiView extends Component<Props> {
             title: '业务员派单',
             //   headerTitle: <Icon name={"alert"} size="lg" />,
             headerRight: (
-                <TouchableOpacity onPress={() => { navigation.navigate("BarCodeCamera", { from: "orderRepairDetailView", id: navigation.getParam('id', 1) }); }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("AddNewOrder"); }}>
                     <View style={{ marginRight: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 19, color: 'white' }}>添加</Text>
-                        <Icon name={"scan"} size="lg" />
+                        <Icon name={"plus-square"} size="lg" />
                     </View>
                 </TouchableOpacity>
             ),
@@ -54,6 +54,15 @@ export default class orderListDaiPaiView extends Component<Props> {
 
     componentDidMount() {
         this._getOrderList()
+        //收到监听
+        this.updateListtener = DeviceEventEmitter.addListener('paiToQiangUpdate', (e) => {
+            this.pageIndex = 1;
+            this._getOrderList();
+        });
+    }
+
+    componentWillUnmount() {
+        this.updateListtener.remove();
     }
     _getOrderList() {
         httpApi.getOrderListDaiPai(this.pageIndex).then(data => {

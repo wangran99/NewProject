@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { ListItem, SearchBar as ElementSearchBar } from 'react-native-elements';
-import { Carousel, Icon, SearchBar, TabBar, Grid, Button } from '@ant-design/react-native';
+import { Carousel, Icon, SearchBar, TabBar, Grid, Button, Badge } from '@ant-design/react-native';
 import {
     FlatList, StyleSheet, Text, Keyboard, TouchableOpacity, Image, View, ScrollView,
     Alert, AsyncStorage, StatusBar, RefreshControl, DeviceEventEmitter
@@ -35,10 +35,10 @@ const data = [{
     name: 'car',
     text: `车辆管理`,
 }, {
-    name: 'alipay-circle',
+    name: 'clock-circle',
     text: `租机抄表`,
 }, {
-    name: 'alipay-circle',
+    name: 'cluster',
     text: `添加设备`,
 }, {
     name: 'project',
@@ -53,13 +53,13 @@ const data = [{
     name: 'tool',
     text: `维修工单`,
 }, {
-    name: 'alipay-circle',
+    name: 'reload-time',
     text: `送货工单`,
 }, {
-    name: 'alipay-circle',
+    name: 'carry-out',
     text: `安装工单`,
 }, {
-    name: 'alipay-circle',
+    name: 'audit',
     text: `业务员派单`,
 }, {
     name: 'read',
@@ -106,11 +106,6 @@ export default class mainView extends Component<Props> {
             //    data: ['1', '2', '3'],
             //   imgHeight: 176,
             keys: '',
-            entries: [
-                require('../img/companyLogin.jpg'),
-                require('../img/userLogin.jpg'),
-                require('../img/companyLogin.jpg')
-            ],
             //   activeSlide: 1
             personInfo: {
                 "Table": [{ "jobnumber": "laowang", "userphone": "13362001700" }],
@@ -126,6 +121,7 @@ export default class mainView extends Component<Props> {
             ljjf: 0,
             ljjf2: 0,
 
+            newNum: {},
             isRefreshing: false,
 
         };
@@ -148,6 +144,7 @@ export default class mainView extends Component<Props> {
         this._refreshAnnouncement();
         this.getOrderList();
         this._getOrderBusinessStatistics();
+        this._getNewNumberList();
         //收到监听
         this.updateOderListlistener = DeviceEventEmitter.addListener('orderList', (e) => {
             this.getOrderList();
@@ -155,11 +152,19 @@ export default class mainView extends Component<Props> {
         this.updateAnnouncementListlistener = DeviceEventEmitter.addListener('announcementList', (e) => {
             this._refreshAnnouncement("");
         });
+        this.timer = setInterval(
+            () => {
+                console.log('把一个定时器的引用挂在this上');
+                this._getNewNumberList();
+            },
+            6 * 1000
+        );
     }
     componentWillUnmount() {
         // 移除监听 
         this.updateOderListlistener.remove();
         this.updateAnnouncementListlistener.remove();
+        this.timer && clearInterval(this.timer);
     }
     _getAnnouncement(page, keys) {
         httpApi.getAnnouncement(page, keys).then((data) => {
@@ -169,6 +174,12 @@ export default class mainView extends Component<Props> {
     }
     dismissKeyboardClick() {
 
+    }
+    _getNewNumberList() {
+        httpApi.getIndexNewNum().then(data => {
+            data.Table[0].danju = data.Table[0].danju + data.Table[0].danjuRent;
+            this.setState({ newNum: data.Table[0] });
+        });
     }
     renderAnnouncementView() {
         let test = 1;
@@ -381,10 +392,25 @@ export default class mainView extends Component<Props> {
                         itemStyle={{ fontSize: 10, }}
                         styles={[styles.text]}
                         renderItem={(el, index) => {
-                            return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }} >
-                                <Icon name={el.name} size="lg"></Icon>
-                                <Text style={{ fontSize: 16 }}>{el.text}</Text>
-                            </View>
+                            let number = 0;
+                            if (index == 0)
+                                number = this.state.newNum.zhipaidan;
+                            else if (index == 1)
+                                number = this.state.newNum.danju;
+                            else if (index == 3)
+                                number = this.state.newNum.chaobiao;
+                            else if (index == 8)
+                                number = this.state.newNum.weixiu;
+                            else if (index == 9)
+                                number = this.state.newNum.songhuo;
+                            else if (index == 10)
+                                number = this.state.newNum.anzhuang;
+                            return <Badge text={number} style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }} >
+                                    <Icon name={el.name} size="lg"></Icon>
+                                    <Text style={{ fontSize: 16 }}>{el.text}</Text>
+                                </View>
+                            </Badge>
                         }}
                         onPress={(el, index) => this._onPressWorkGridItem(index)}
                     />
@@ -419,6 +445,10 @@ export default class mainView extends Component<Props> {
             this.props.navigation.navigate("OrderInstall");
         else if (index == 11)
             this.props.navigation.navigate("OrderListDaiPai");
+        else if (index == 12)
+            this.props.navigation.navigate("OrderListDaiPai");
+        else if (index == 13)
+            this.props.navigation.navigate("BusinessDisclosure");
     }
     renderMyView() {
         const list = [
@@ -442,7 +472,7 @@ export default class mainView extends Component<Props> {
             <ScrollView>
                 <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
                     {/*{头像}*/}
-                    <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} />
+                    <Image source={require('../img/avator.jpg')} style={styles.iconStyle} />
                     <Text style={[styles.nameText,]}>{this.state.personInfo.Table[0].username}</Text>
                     <View style={{ backgroundColor: 'lightgray', marginTop: 10, width: width }}>
                         <Text style={styles.titleText} > 业务信息</Text >
@@ -501,21 +531,35 @@ export default class mainView extends Component<Props> {
         //   this.props.navigation.navigate('UserLogin');
     }
     _onPressLogoutButton() {
-        //    local.remove("cookie");
-        local.remove("account").then(() => {
-            return local.remove("username");
-        }).then(() => {
-            return local.remove("username");
-        }).then(() => {
-            return local.remove("password");
-        }).then(() => {
-            return local.remove("uid");
-        }).then(() => {
-            httpApi.logout();
-            this.props.navigation.navigate('Auth');
-        }).catch((value) => {
-            let a = value;
-        });
+        Alert.alert(
+            '提示',
+            '确定要退出登录吗？',
+            [
+                {
+                    text: '确定', onPress: () => {
+                        local.remove("account").then(() => {
+                            return local.remove("username");
+                        }).then(() => {
+                            return local.remove("username");
+                        }).then(() => {
+                            return local.remove("password");
+                        }).then(() => {
+                            return local.remove("uid");
+                        }).then(() => {
+                            httpApi.logout();
+                            this.props.navigation.navigate('Auth');
+                        }).catch((value) => {
+                            let a = value;
+                            alert("删除登录信息失败");
+                        });
+                    }
+                },
+                { text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                // {text: '其他', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+        );
+
     }
     onChangeTab(tabName) {
         this.setState({
@@ -555,18 +599,21 @@ export default class mainView extends Component<Props> {
                 tintColor="#33A3F4"
                 barTintColor="#f5f5f5"
             >
+
                 <TabBar.Item
                     title="公告栏"
+                    badge={this.state.newNum.gonggaolan}
                     icon={<Icon name="ordered-list" />}
                     selected={this.state.selectedTab === 'announcementTab'}
                     onPress={() => this.onChangeTab('announcementTab')}
                 >
                     {this.renderAnnouncementView()}
                 </TabBar.Item>
+
                 <TabBar.Item
                     icon={<Icon name='bell' />}
                     title="抢单"
-                    badge={2}
+                    badge={this.state.newNum.qiangdan}
                     selected={this.state.selectedTab === 'orderTab'}
                     onPress={() => this.onChangeTab('orderTab')}
                 >

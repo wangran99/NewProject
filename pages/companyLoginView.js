@@ -52,7 +52,7 @@ export default class companyLoginView extends Component<Props> {
             <ScrollView style={{backgroundColor:'lightgray'}}>
                 <View style={styles.container}>
                     {/*{头像}*/}
-                    <Image source={require('../img/companyLogin.jpg')} style={styles.iconStyle} />
+                    <Image source={require('../img/company.jpg')} style={styles.iconStyle} />
                     {/*账号和密码*/}
                     <TextInput placeholder={'请输入企业编码'}
                         clearButtonMode="while-editing"//只有在iOS系统有效

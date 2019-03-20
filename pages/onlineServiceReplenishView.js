@@ -36,25 +36,28 @@ export default class onlineServiceReplenishView extends Component<Props> {
         super(props);
         this.state = {
             data: dataTest,
-            isRefreshing: false,
-            kilometer: '',
-            avatarSource: null,
+            describe: '',
+            phone: '',
+
         };
-        this.picNumber = '';
-        const { navigation } = this.props;
-        this.id = navigation.getParam('id', 1);
+        this.id = '';
+        this.orderamount = '';
     }
 
     componentDidMount() {
         const { navigation } = this.props;
-        const id = navigation.getParam('id', 1);
-        httpApi.getCarDetail(id).then((data) => {
-            this.setState(data)
+        this.id = navigation.getParam('id', 1);
+        httpApi.getOrderDetails(this.id).then((data) => {
+            this.setState({
+                data: data, describe: data.Table[0].describe,
+                phone: data.Table[0].phone,
+            })
         });
     }
     _onPressButton() {
 
-        httpApi.postCarReturn(this.id, this.state.kilometer, this.picNumber)
+        httpApi.postOrderReplenish(this.id, this.state.data.Table[0].facilitycode, this.state.data.Table[0].ordertype,
+            this.state.describe, this.state.phone, this.orderamount)
             .then((data) => {
                 let code = data.Table[0].Column1;
                 if (code == 1000) {
@@ -75,62 +78,73 @@ export default class onlineServiceReplenishView extends Component<Props> {
 
 
     render() {
-        const { navigation } = this.props;
-        const itemId = navigation.getParam('code', 'NO-ID');
+        let dt = this.state.data.Table[0];
+        let type = '';
+        if (dt.ordertype == 0) {
+            type = "安装";
+        }
+        else if (dt.ordertype == 3) {
+            type = "临修";
+        }
+        else if (dt.ordertype == 1) {
+            type = "维修";
+        } else {
+            type = "送货";
+        }
         return (
             <ScrollView>
                 <View style={styles.container}>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>设备编号:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].licence}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].facilitycode}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>工单种类:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].licence}</Text>
+                        <Text style={[styles.textStyle]}>{type}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>客户名称:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforekilometre}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].name}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>客户地址:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforekilometre}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].address}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>设备分类:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforekilometre}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].classift}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>品       牌:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforetime}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].brand}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>型       号:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforetime}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].model}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>接单时间:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforetime}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].ordertime}</Text>
                     </View>
 
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>问题描述:</Text>
                     </View>
-                    <TextareaItem style={[styles.textStyle, { marginHorizontal: 10,marginTop:5, width: width * 0.9, borderWidth: 1, backgroundColor: 'white', borderRadius: 6, borderColor: 'lightgray' }]
-                    } placeholder={'请填写问题描述'} rows={4} onChange={(value) => this.setState({ remark: value })} ></TextareaItem >
+                    <TextareaItem style={[styles.textStyle, { marginHorizontal: 10, marginTop: 5, width: width * 0.9, borderWidth: 1, backgroundColor: 'white', borderRadius: 6, borderColor: 'lightgray' }]
+                    } placeholder={'请填写问题描述'} value={this.state.describe} rows={4} onChange={(value) => this.setState({ describe: value })} ></TextareaItem >
 
                     <View style={[styles.textRowContainer, { alignItems: 'center', }]}>
                         <Text style={styles.textStyle}>手 机 号 ：</Text>
-                        <TextInput style={[styles.textStyle, { flex: 1,marginLeft:5, backgroundColor: 'white', borderRadius: 6 }]} value={this.state.phone}
-                            onChangeText={(phone) => this.setState({ phone })} keyboardType='numeric'></TextInput>
+                        <TextInput style={[styles.textStyle, { flex: 1, marginLeft: 5, backgroundColor: 'white', borderRadius: 6 }]} value={this.state.phone}
+                            value={this.state.phone} onChangeText={(phone) => this.setState({ phone })} keyboardType='numeric'></TextInput>
                     </View>
                     <View style={[styles.textRowContainer, { alignItems: 'center', }]}>
                         <Text style={styles.textStyle}>开单金额：</Text>
-                        <TextInput style={[styles.textStyle, { flex: 1, backgroundColor: 'white', borderRadius: 6 }]} value={this.state.phone}
-                            onChangeText={(phone) => this.setState({ phone })} keyboardType='numeric'></TextInput>
+                        <TextInput style={[styles.textStyle, { flex: 1, backgroundColor: 'white', borderRadius: 6 }]}
+                            onChangeText={(orderamount) => this.orderamount = orderamount} keyboardType='numeric'></TextInput>
                     </View>
 
-                    <View style={{ alignSelf: 'center', marginVertical: 35, width: width * 0.85 }}>
+                    <View style={{ alignSelf: 'center', marginVertical: 35, width: width * 0.9 }}>
                         <Button style={{ color: 'white' }} title="保存" onPress={this._onPressButton.bind(this)} />
                     </View>
 

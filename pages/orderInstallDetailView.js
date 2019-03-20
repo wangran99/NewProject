@@ -197,7 +197,7 @@ export default class orderInstallDetailView extends Component<Props> {
                                     )
                                 }}
                                 data={this.state.dataRecord.Table}
-                                keyExtractor={(item, index) => { return "index" + item.id }}
+                                keyExtractor={(item, index) => { return "index" + item.orderid }}
                                 renderItem={({ item }) => <OrderRepairRecordListItem data={item} style={{ margin: 22 }}
                                     onPress={() => {
                                         // let a = 1;

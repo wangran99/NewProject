@@ -12,14 +12,7 @@ import httpApi from '../tools/api'
 var Dimensions = require('Dimensions');
 var width = Dimensions.get('window').width;
 
-var dataTest = {
-    "Table": [{
-        "addtime": "2019/3/7 20:46:03", "username": "", "beforekilometre": 10.00,
-        "beforetime": "2019/3/7 20:46:03", "beforeimg": "D884B0C33F8EBBCD40B22256FED1FB17.png",
-        "Afterkilometre": "", "Aftertime": "", "Afterimg": "", "countkilometre": "", "status": 1, "state": 0,
-        "licence": "浙3231"
-    }]
-};
+
 type Props = {};
 export default class onlineServiceView extends Component<Props> {
 
@@ -34,27 +27,21 @@ export default class onlineServiceView extends Component<Props> {
     // };
     constructor(props) {
         super(props);
-        this.state = {
-            data: dataTest,
-            isRefreshing: false,
-            kilometer: '',
-            avatarSource: null,
-        };
-        this.picNumber = '';
+
         const { navigation } = this.props;
-        this.id = navigation.getParam('id', 1);
+        const data = navigation.getParam('data', '');
+        this.state = {
+            data: data,
+            phone: '',
+            describe: '',
+            img: ''
+        };
+        // console.warn("data:" + JSON.stringify(data));
+
     }
 
-    componentDidMount() {
-        const { navigation } = this.props;
-        const id = navigation.getParam('id', 1);
-        httpApi.getCarDetail(id).then((data) => {
-            this.setState(data)
-        });
-    }
     _onPressButton() {
-        this.props.navigation.navigate("onlineServiceReplenish");
-        httpApi.postCarReturn(this.id, this.state.kilometer, this.picNumber)
+        httpApi.postBaoXiu(this.state.data.Table[0].facilitycode, this.state.phone, this.state.describe, '')
             .then((data) => {
                 let code = data.Table[0].Column1;
                 if (code == 1000) {
@@ -62,7 +49,9 @@ export default class onlineServiceView extends Component<Props> {
                         '成功',
                         '' + data.Table[0].Column2,
                         [
-                            { text: '确定', onPress: () => this.props.navigation.pop() },
+                            {
+                                text: '确定', onPress: () => this.props.navigation.navigate("onlineServiceReplenish", { id: data.Table[0].Column3 })
+                            },
                         ],
                         { cancelable: false }
                     )
@@ -75,33 +64,35 @@ export default class onlineServiceView extends Component<Props> {
 
 
     render() {
-        const { navigation } = this.props;
-        const itemId = navigation.getParam('code', 'NO-ID');
         return (
-            <ScrollView>
+            <ScrollView style={{ backgroundColor: 'lightgray' }}>
                 <View style={styles.container}>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>设备编号:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].licence}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].facilitycode}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>客户名称:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforekilometre}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].name}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>设备分类:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforekilometre}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].classift}</Text>
                     </View>
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>设备品牌:</Text>
-                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].beforetime}</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].brand}</Text>
+                    </View>
+                    <View style={[styles.textRowContainer, {}]}>
+                        <Text style={[styles.textStyle,]}>设备型号:</Text>
+                        <Text style={[styles.textStyle]}>{this.state.data.Table[0].model}</Text>
                     </View>
 
                     <View style={[styles.textRowContainer, {}]}>
                         <Text style={[styles.textStyle,]}>故障现象:</Text>
                     </View>
                     <TextareaItem style={[styles.textStyle, { marginHorizontal: 10, marginTop: 5, width: width * 0.9, borderWidth: 1, backgroundColor: 'white', borderRadius: 6, borderColor: 'lightgray' }]
-                    } placeholder={'请填写故障现象'} rows={4} onChange={(value) => this.setState({ remark: value })} ></TextareaItem >
+                    } placeholder={'请填写故障现象'} rows={4} onChange={(problem) => this.setState({ problem })} ></TextareaItem >
 
                     <View style={[styles.textRowContainer, { alignItems: 'center', }]}>
                         <Text style={styles.textStyle}>报修电话 ：</Text>
@@ -109,7 +100,7 @@ export default class onlineServiceView extends Component<Props> {
                             onChangeText={(phone) => this.setState({ phone })} keyboardType='numeric'></TextInput>
                     </View>
 
-                    <View style={{ alignSelf: 'center', marginVertical: 35, width: width * 0.85 }}>
+                    <View style={{ alignSelf: 'center', marginVertical: 35, width: width * 0.9 }}>
                         <Button style={{ color: 'white' }} title="提交" onPress={this._onPressButton.bind(this)} />
                     </View>
 

@@ -53,10 +53,14 @@ var OrderInstallView = require('./pages/orderInstallView')
 var OrderInstallDetailView = require('./pages/orderInstallDetailView')
 var OrderInstallReplenishView = require('./pages/orderInstallReplenishView')
 var OrderListDaiPaiView = require('./pages/orderListDaiPaiView')
+var AddNewOrderView = require('./pages/addNewOrderView')
 
 var CallForRepairView = require('./pages/callForRepairView')
 var OnlineServiceView = require('./pages/onlineServiceView')
 var OnlineServiceReplenishView = require('./pages/onlineServiceReplenishView')
+
+var BusinessDisclosureView = require('./pages/businessDisclosureView')
+
 var ChangePhoneNumberView = require('./pages/changePhoneNumberView')
 var OrderQueryView = require('./pages/orderQueryView')
 var ChangePasswordView = require('./pages/changePasswordView')
@@ -109,9 +113,11 @@ const AppStack = createStackNavigator(
     OrderInstallDetail: OrderInstallDetailView,
     OrderInstallReplenish: OrderInstallReplenishView,
     OrderListDaiPai: OrderListDaiPaiView,
+    AddNewOrder: AddNewOrderView,
     CallForRepair: CallForRepairView,
     OnlineService: OnlineServiceView,
     onlineServiceReplenish: OnlineServiceReplenishView,
+    BusinessDisclosure: BusinessDisclosureView,
     OrderQuery: OrderQueryView,
     ChangePhoneNumber: ChangePhoneNumberView,
     ChangePassword: ChangePasswordView,

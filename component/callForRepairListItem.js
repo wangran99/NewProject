@@ -3,7 +3,8 @@ import { Button } from 'react-native-elements';
 import { TouchableHighlight, TouchableOpacity, StyleSheet, Text, KeyboardAvoidingView, Image, View, Alert } from 'react-native';
 // import Dialog, { DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
 
-// var width = Dimensions.get('window').width;
+var Dimensions = require('Dimensions');
+var width = Dimensions.get('window').width;
 
 export default class callForRepairListItem extends Component {
 
@@ -11,46 +12,44 @@ export default class callForRepairListItem extends Component {
         const { data, onPress, navigator } = this.props
 
         return (
-            <TouchableOpacity onPress={onPress} disabled>
-                <View style={styles.containerStyle} >
-                    <Text style={[styles.textStyle, { marginHorizontal: 10, marginVertical: 5 }]}>服务记录:</Text>
-                    <View style={[styles.rowStyle, { height: 1, backgroundColor: 'lightgray' }]}></View>
-                    <View style={styles.rowStyle}>
-                        <Text style={[styles.textStyle]}>故障现象:</Text>
-                        <Text style={[styles.textStyle]}>{data.id}</Text>
-                    </View>
-                    <View style={styles.rowStyle}>
-                        <Text style={[styles.textStyle]}>处理办法:</Text>
-                        <Text style={[styles.textStyle]}>{data.name}</Text>
-                    </View>
-                    <View style={styles.rowStyle}>
-                        <Text style={[styles.textStyle]}>具体处理办法:</Text>
-                        <Text style={[styles.textStyle]}>{data.address}</Text>
-                    </View>
-                    <View style={styles.rowStyle}>
-                        <Text style={[styles.textStyle]}>联系电话:</Text>
-                        <Text style={[styles.textStyle]}>{data.doorplate}</Text>
-                    </View>
-                    <View style={styles.rowStyle}>
-                        <Text style={[styles.textStyle]}>保修时间:</Text>
-                        <Text style={[styles.textStyle]}>{data.contactNumber}</Text>
-                    </View>
-                    <View style={styles.rowStyle}>
-                        <Text style={[styles.textStyle]}>完成时间:</Text>
-                        <Text style={[styles.textStyle]}>{data.cause}</Text>
-                    </View>
-
+            // <TouchableOpacity disabled>
+            <View style={styles.containerStyle} >
+                <View style={[styles.rowStyle, { borderRadius: 9, borderColor: 'blue', justifyContent: 'space-between' }]}>
+                    <Text style={[styles.textStyle, { fontSize: 19, }]}>服务记录</Text>
+                    {data.is_already == 1 ? <Button style={[styles.textStyle, {}]} title='报修中' onPress={onPress}></Button> :
+                        <Button style={[styles.textStyle]} title='已确认' type="clear"></Button>}
                 </View>
-            </TouchableOpacity>
+                <View style={[styles.rowStyle, { height: 1, backgroundColor: 'lightgray' }]}></View>
+                <View style={styles.rowStyle}>
+                    <Text style={[styles.textStyle]}>故障现象:</Text>
+                    <Text style={[styles.textStyle]}>{data.phenomena}</Text>
+                </View>
+                <View style={styles.rowStyle}>
+                    <Text style={[styles.textStyle]}>处理办法:</Text>
+                    <Text style={[styles.textStyle]}>{data.handling}</Text>
+                </View>
+                <View style={styles.rowStyle}>
+                    <Text style={[styles.textStyle]}>具体处理办法:</Text>
+                    <Text style={[styles.textStyle]}>{data.jthandling}</Text>
+                </View>
+                <View style={styles.rowStyle}>
+                    <Text style={[styles.textStyle]}>联系电话:</Text>
+                    <Text style={[styles.textStyle]}>{data.phone}</Text>
+                </View>
+                <View style={styles.rowStyle}>
+                    <Text style={[styles.textStyle]}>保修时间:</Text>
+                    <Text style={[styles.textStyle]}>{data.issuetime}</Text>
+                </View>
+                <View style={styles.rowStyle}>
+                    <Text style={[styles.textStyle]}>完成时间:</Text>
+                    <Text style={[styles.textStyle]}>{data.addtime}</Text>
+                </View>
+
+            </View>
+            // </TouchableOpacity>
         )
     }
 
-    componentWillReceiveProps(pro) {
-        let a = pro
-    }
-    pushOneDetails = () => {
-        this.props.navigatorPush.navigate("Main");
-    }
 }
 
 const styles = StyleSheet.create({
@@ -58,10 +57,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flex: 1,
         marginHorizontal: 6,
-        marginVertical: 5,
+        marginVertical: 10,
         //   justifyContent: 'center',
         //    alignItems: 'center',
-        borderRadius: 9
+        borderRadius: 9,
+        borderColor: 'red'
+
     },
     textStyle: {
         fontSize: 18,

@@ -102,7 +102,7 @@ export default class orderRepairDetailView extends Component<Props> {
         let status = (dt.orderstatus == 0 && "未派单" || dt.orderstatus == 1 && "1已派单" || dt.orderstatus == 2 && "已取消"
             || dt.orderstatus == 3 && "已接单" || dt.orderstatus == 4 && "已到达（处理中）" || dt.orderstatus == 5 && "已完成"
             || dt.orderstatus == 6 && "未解决" || dt.orderstatus == 7 && "送修中");
-
+        // dt.orderstatus=4;
         return (
             <ScrollView>
                 <View style={styles.container}>
@@ -171,7 +171,7 @@ export default class orderRepairDetailView extends Component<Props> {
                         <View style={{ height: 10, backgroundColor: 'lightgray' }}></View>
 
                         <View style={{ marginHorizontal: 10, marginTop: 5, marginBottom: 10, borderRadius: 8, backgroundColor: 'white' }}>
-                            {dt.orderstatus == 4 ? <Button type='outline' style={{ width: width * 0.8, marginVertical: 10 }}
+                            {dt.orderstatus == 4 ? <Button  style={{ width: width * 0.8, marginVertical: 10 }}
                                 title='维修报告' onPress={() => this.props.navigation.navigate("AddOrderRepairReport", { orderId: this.state.data.Table[0].orderid })} /> : null}
                             <Text style={styles.textStyle}>维修历史记录：</Text>
                             <View style={{ height: 1, marginVertical: 10, backgroundColor: 'black' }}></View>

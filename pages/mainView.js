@@ -446,7 +446,7 @@ export default class mainView extends Component<Props> {
         else if (index == 11)
             this.props.navigation.navigate("OrderListDaiPai");
         else if (index == 12)
-            this.props.navigation.navigate("OrderListDaiPai");
+            this.props.navigation.navigate("TechnologyArticle");
         else if (index == 13)
             this.props.navigation.navigate("BusinessDisclosure");
     }
@@ -490,7 +490,6 @@ export default class mainView extends Component<Props> {
                         <View style={{ flex: 1, }} >
                             <WorkInfoItem title="累计积分2" number={this.state.ljjf2} icon={"account-book"} onPress={this._onPressMyGridItem.bind(this, 3)} />
                         </View>
-                        {/* <Image source={require('../img/userLogin.jpg')} style={styles.iconStyle} /> */}
                     </View>
 
                     <View style={{ width: width, backgroundColor: 'white' }}>
@@ -512,7 +511,6 @@ export default class mainView extends Component<Props> {
                     <View style={styles.logoutBtnStyle}>
                         <Button type="warning" onPress={this._onPressLogoutButton.bind(this)}>退出</Button>
                     </View>
-                    {/* <Button activeStyle={{ backgroundColor: 'blue' }}>你好</Button> */}
                 </View >
             </ScrollView>
         );

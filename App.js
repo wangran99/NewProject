@@ -54,6 +54,8 @@ var OrderInstallDetailView = require('./pages/orderInstallDetailView')
 var OrderInstallReplenishView = require('./pages/orderInstallReplenishView')
 var OrderListDaiPaiView = require('./pages/orderListDaiPaiView')
 var AddNewOrderView = require('./pages/addNewOrderView')
+var TechnologyArticleView = require('./pages/technologyArticleView')
+var TechnologyArticleDetailView = require('./pages/technologyArticleDetailView')
 
 var CallForRepairView = require('./pages/callForRepairView')
 var OnlineServiceView = require('./pages/onlineServiceView')
@@ -114,6 +116,8 @@ const AppStack = createStackNavigator(
     OrderInstallReplenish: OrderInstallReplenishView,
     OrderListDaiPai: OrderListDaiPaiView,
     AddNewOrder: AddNewOrderView,
+    TechnologyArticle: TechnologyArticleView,
+    TechnologyArticleDetail: TechnologyArticleDetailView,
     CallForRepair: CallForRepairView,
     OnlineService: OnlineServiceView,
     onlineServiceReplenish: OnlineServiceReplenishView,

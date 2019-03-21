@@ -79,7 +79,7 @@ export default class addNewEquipmentView extends Component<Props> {
                     //  this.props.navigation.pop(2);
                     Alert.alert(
                         '添加成功',
-                        '' + data.Table[0].Column,
+                        '' + data.Table[0].Column2,
                         [
                             { text: '确定', onPress: () => this.props.navigation.pop(2) },
                             // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},

@@ -78,7 +78,7 @@ export default class unfinishedOrderListItem extends Component {
                     </View>
                     <View style={{ marginHorizontal: 10, marginTop: 5, flexDirection: 'row', justifyContent: 'flex-start' }}>
                         <Text style={[styles.textStyle]}>接单人:</Text>
-                        <Text style={[styles.textStyle]}>{data.classift}</Text>
+                        <Text style={[styles.textStyle]}>{data.orderreceiving}</Text>
                     </View>
                     <View style={{ marginHorizontal: 10, marginTop: 5, flexDirection: 'row', justifyContent: 'flex-start' }}>
                         <Text style={[styles.textStyle]}>工单种类:</Text>

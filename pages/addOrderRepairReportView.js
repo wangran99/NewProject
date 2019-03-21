@@ -38,16 +38,17 @@ export default class addOrderRepairReportView extends Component<Props> {
         super(props);
         this.state = {
             data: dataTest,
-            solution: null,
-            replace: null,
-            address: null,
+            solution: true,
+            replace: true,
+            address: true,
             phenomena: '',
             handling: '',
             jthandling: '',
+            feedback: '',
             peice: '',
             integral: '',
             integralex: '',
-            rectype: null,
+            rectype: true,
             img: '',
             avatarSource: ''//上传图片显示的小图标
         };
@@ -55,28 +56,33 @@ export default class addOrderRepairReportView extends Component<Props> {
     }
 
     _onPressButton() {
-        // Alert.alert('You tapped the button!'+local.get("code"));
-        // local.get('code').then((code) => {
-        //     console.log("get code:"+ code);
-        // });
-        //    httpApi.personLogin(this.state.userName, this.state.password)
-        httpApi.addOrderServiceReport('yhj', '123456')
+        httpApi.addOrderServiceReport(this.orderId, this.state.solution ? 1 : 0, this.state.replace ? 1 : 0
+            , this.state.address ? 1 : 0, this.state.phenomena, this.state.handling, this.state.jthandling
+            , this.state.feedback, this.state.peice, this.state.integral, this.state.integralex,
+            this.state.rectype ? 1 : 0, this.picNumber)
             .then((response) => {
-                let code = response.data['data0'];
+                let code = response.Table[0].Column1;
                 if (code == 1000) {
-                    let cookie = response.headers["Cookie"];
-                    local.set("cookie", cookie);
-                    this.props.navigation.navigate('Main');
+                    Alert.alert(
+                        '成功',
+                        '' + response.Table[0].Column2,
+                        [
+                            { text: '确定', onPress: () => this.props.navigation.pop() },
+                            // {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                            // {text: '其他', onPress: () => console.log('OK Pressed')},
+                        ],
+                        { cancelable: false }
+                    );
                 }
                 else
-                    Alert.alert('错误', JSON.stringify(data));
+                    Alert.alert('错误', JSON.stringify(response.Table[0].Column2));
             });
         //   this.props.navigation.navigate('UserLogin');
     }
     componentDidMount() {
         const { navigation } = this.props;
-        const orderId = navigation.getParam('orderId', 1);
-        httpApi.getOrderDetails(orderId).then(data => {
+        this.orderId = navigation.getParam('orderId', 1);
+        httpApi.getOrderDetails(this.orderId).then(data => {
             this.setState({ data });
         });
     }
@@ -84,7 +90,7 @@ export default class addOrderRepairReportView extends Component<Props> {
         let dt = this.state.data.Table[0];
         return (
             <KeyboardAwareScrollView keyboardShouldPersistTaps='always'>
-                 {/* <ScrollView> */}
+                {/* <ScrollView> */}
 
                 <View style={styles.container}>
                     <View style={[styles.textRowStyle, {}]}>
@@ -185,17 +191,17 @@ export default class addOrderRepairReportView extends Component<Props> {
                         <CheckBox
                             title='挂账'
                             style={{ borderColor: 'lightgray' }}
-                            checked={this.state.rectype}
-                            textStyle={{ fontSize: 17 }}
-                            containerStyle={{ backgroundColor: 'transparent' }}
-                            onPress={() => this.setState({ rectype: true })}
-                        />
-                        <CheckBox
-                            title='现金'
                             checked={!this.state.rectype}
                             textStyle={{ fontSize: 17 }}
                             containerStyle={{ backgroundColor: 'transparent' }}
                             onPress={() => this.setState({ rectype: false })}
+                        />
+                        <CheckBox
+                            title='现金'
+                            checked={this.state.rectype}
+                            textStyle={{ fontSize: 17 }}
+                            containerStyle={{ backgroundColor: 'transparent' }}
+                            onPress={() => this.setState({ rectype: true })}
                         />
                     </View>
                     <View style={[styles.textRowStyle, {}]}>

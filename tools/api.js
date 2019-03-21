@@ -30,6 +30,11 @@ class httpapi {
     static getAnnouncementDetail(id) {
         return postData("/commList.asmx/NewsDetails", { id });
     }
+
+    // 技术资料列表
+    static getTechnology(page, keys = '') {
+        return postData("/commList.asmx/NewsList2", { page: page, keys: keys });
+    }
     // 抢单列表
     static getOrderQiang() {
         return postData("/Order.asmx/ReceiveOrderQiang");

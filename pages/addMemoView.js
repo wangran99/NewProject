@@ -23,6 +23,10 @@ var data = [
         label: '2016',
         value: '2016',
     },
+    {
+        label: '2016',
+        value: '2016',
+    },
 ];
 var data1 = ["私密", "公开"];
 

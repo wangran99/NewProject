@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Divider } from 'react-native-elements';
-import { Button, TouchableHighlight, TouchableOpacity, StyleSheet, Text, KeyboardAvoidingView, Image, View, Alert } from 'react-native';
+import { Divider ,Button} from 'react-native-elements';
+import {  TouchableHighlight, TouchableOpacity, StyleSheet, Text, KeyboardAvoidingView, Image, View, Alert } from 'react-native';
 // import Dialog, { DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
 
 // var width = Dimensions.get('window').width;

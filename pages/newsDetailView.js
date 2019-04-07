@@ -5,8 +5,9 @@ import { Button } from 'react-native-elements';
 import { Button as AButton, Provider, Toast } from '@ant-design/react-native';
 // import HTMLView from 'react-native-htmlview';
 import MyWebView from 'react-native-webview-autoheight';
+import { WebView } from "react-native-webview";
 //import AButton from '@ant-design/react-native/lib/button';
-import { Platform, StyleSheet, Text, TextInput, Image, View, Alert, DeviceEventEmitter } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, WebView, View, Alert, DeviceEventEmitter } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import qs from 'qs'
 
@@ -55,8 +56,8 @@ export default class newsDetailView extends Component<Props> {
             });
         });
     }
-    componentWillUnmount(){
-        DeviceEventEmitter.emit('announcementList',"jianting"); //发监听
+    componentWillUnmount() {
+        DeviceEventEmitter.emit('announcementList', "jianting"); //发监听
     }
     render() {
         // var htmlContent = '<p><a href="">&hearts; nice job!</a></p>';
@@ -66,16 +67,18 @@ export default class newsDetailView extends Component<Props> {
 
             <ScrollView style={{ backgroundColor: 'lightgray' }}>
                 <View style={styles.container}>
-                    <Text style={{ fontSize: 20, color: "black", marginVertical: 20, textAlign:'center'}} >{this.state.title}</Text>
+                    <Text style={{ fontSize: 20, color: "black", marginVertical: 20, textAlign: 'center' }} >{this.state.title}</Text>
                     <Text style={{ fontSize: 15 }}>{this.state.addTime}</Text>
 
                     <MyWebView
-                        style={{marginVertical:20, backgroundColor: 'lightgray' }}
+                        style={{ marginVertical: 20, backgroundColor: 'lightgray' }}
                         source={{ html: this.state.content }}
                         startInLoadingState={true}
-                   
-                    />
 
+                    />
+                     <WebView
+        source={{ uri: "https://www.baidu.com" }}
+      />
                     {/* <Text style={{ fontSize: 19, marginVertical: 15, marginHorizontal: 20 }}>{this.state.content}</Text> */}
 
                 </View>

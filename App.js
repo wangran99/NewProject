@@ -67,6 +67,9 @@ var ChangePhoneNumberView = require('./pages/changePhoneNumberView')
 var OrderQueryView = require('./pages/orderQueryView')
 var ChangePasswordView = require('./pages/changePasswordView')
 
+var ShortRentListView = require('./pages/shortRentListView')
+var ShortRentEquipListView = require('./pages/shortRentEquipListView')
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -125,6 +128,8 @@ const AppStack = createStackNavigator(
     OrderQuery: OrderQueryView,
     ChangePhoneNumber: ChangePhoneNumberView,
     ChangePassword: ChangePasswordView,
+    ShortRentList: ShortRentListView,
+    ShortRentEquipList: ShortRentEquipListView,
     Test: TestView,
   },
   {

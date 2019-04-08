@@ -7,7 +7,7 @@ import { Button as AButton, Provider, Toast } from '@ant-design/react-native';
 import MyWebView from 'react-native-webview-autoheight';
 import { WebView } from "react-native-webview";
 //import AButton from '@ant-design/react-native/lib/button';
-import { Platform, StyleSheet, Text, TextInput, WebView, View, Alert, DeviceEventEmitter } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput, View, Alert, DeviceEventEmitter } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import qs from 'qs'
 
@@ -19,6 +19,18 @@ var Dimensions = require('Dimensions');
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 
+const script = `
+<script>
+	window.location.hash = 1;
+    var calculator = document.createElement("div");
+    calculator.id = "height-calculator";
+    while (document.body.firstChild) {
+        calculator.appendChild(document.body.firstChild);
+    }
+	document.body.appendChild(calculator);
+    document.title = calculator.scrollHeight;
+</script>
+`;
 type Props = {};
 export default class newsDetailView extends Component<Props> {
     static navigationOptions = {
@@ -32,6 +44,7 @@ export default class newsDetailView extends Component<Props> {
             title: "文章标题",
             content: "文章内容",
             addTime: "2019.1.1",
+            height: height
         };
         this.id = this.props.navigation.getParam('id', '1');
         const type = this.props.navigation.getParam('type', 1);
@@ -59,13 +72,32 @@ export default class newsDetailView extends Component<Props> {
     componentWillUnmount() {
         DeviceEventEmitter.emit('announcementList', "jianting"); //发监听
     }
+    onMessage(e) {
+        let a = 1;
+        this.setState({
+            height: parseInt(e.nativeEvent.data)
+        })
+    }
+    _updateWebViewHeight(event) {
+        if (event.title) {
+            const htmlHeight = Number(event.title) //convert to number
+            this.setState({Height:htmlHeight+200});
+        }
+    }
     render() {
         // var htmlContent = '<p><a href="">&hearts; nice job!</a></p>';
         // const customStyle = "<style>* {max-width: 100%;} body {font-family: sans-serif;} h1 {color: red;}</style>";
-        // const htmlContent = "<h1>This is title</h1><p>Throw your entire HTML here</p>";
+        // let htmlContent = "<h1>This is title</h1><p>Throw your entire HTML here</p>";
+        let jsCode = `
+       window.postMessage = function(data) {
+         __REACT_WEB_VIEW_BRIDGE.postMessage(String(data));
+       };
+       postMessage(document.documentElement.scrollHeight);
+   `;
+
         return (
 
-            <ScrollView style={{ backgroundColor: 'lightgray' }}>
+            <ScrollView style={{ backgroundColor: 'white' }}>
                 <View style={styles.container}>
                     <Text style={{ fontSize: 20, color: "black", marginVertical: 20, textAlign: 'center' }} >{this.state.title}</Text>
                     <Text style={{ fontSize: 15 }}>{this.state.addTime}</Text>
@@ -74,11 +106,31 @@ export default class newsDetailView extends Component<Props> {
                         style={{ marginVertical: 20, backgroundColor: 'lightgray' }}
                         source={{ html: this.state.content }}
                         startInLoadingState={true}
-
+                        scalesPageToFit={false}
                     />
-                     <WebView
-        source={{ uri: "https://www.baidu.com" }}
-      />
+                    {/* <WebView
+                        style={{ marginVertical: 20, }}
+                        // source={{ html: '<h1>Hello world</h1>' }}
+                        source={{ html: this.state.content + script }}
+                        // startInLoadingState={true}
+                        style={{ flex: 1, width: width, height: this.state.height }}
+                        scalesPageToFit={false}
+                        originWhitelist={['*']}
+                        scrollEnabled={false}
+                        onMessage={this.onMessage.bind(this)}
+                        javaScriptEnabled={true}
+                        //  injectedJavaScript = { script }
+                        // injectedJavaScript="document.body.scrollHeight;"
+                        onNavigationStateChange={this._updateWebViewHeight.bind(this)}
+                    /> */}
+                    {/* <WebView
+                        style={{ flex: 1,width:width,height:height }}
+                        source={{ uri: "https://www.baidu.com" }}
+                        scalesPageToFit={true}
+                        javaScriptEnabled={true}
+                        domStorageEnabled={true}
+                        onLoadProgress={e => console.log("load html:" + e.nativeEvent.progress)}
+                    /> */}
                     {/* <Text style={{ fontSize: 19, marginVertical: 15, marginHorizontal: 20 }}>{this.state.content}</Text> */}
 
                 </View>

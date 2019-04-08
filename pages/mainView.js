@@ -67,6 +67,9 @@ const data = [{
 }, {
     name: 'notification',
     text: `业务公开`,
+}, {
+    name: 'calculator',
+    text: `短租`,
 }];
 
 var announcementTest = {
@@ -449,6 +452,8 @@ export default class mainView extends Component<Props> {
             this.props.navigation.navigate("TechnologyArticle");
         else if (index == 13)
             this.props.navigation.navigate("BusinessDisclosure");
+        else if (index == 14)
+            this.props.navigation.navigate("ShortRentList");
     }
     renderMyView() {
         const list = [

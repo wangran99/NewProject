@@ -4,9 +4,10 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import {
     Vibration, Animated,
-    Easing, InteractionManager, StyleSheet, Text, TouchableHighlight, View
+    Easing, InteractionManager, StyleSheet, Text, DeviceEventEmitter, View
 } from 'react-native';
 import { RNCamera, Camera } from 'react-native-camera';
+import httpApi from '../tools/api'
 
 var Dimensions = require('Dimensions');
 const { width, height } = Dimensions.get('window');
@@ -63,9 +64,30 @@ export default class barCodeCameraView extends Component<Props> {
                 navigation.navigate("OrderRepairReplenish", { id: navigation.getParam('id', '') });
             else if (from == "orderInstallDetailView")
                 navigation.navigate("OrderInstallReplenish", { id: navigation.getParam('id', '') });
+            else if (from == "shortRentEquipListView")
+                this.getInfoByBarCode(e);
             else if (from == "mainView")
                 navigation.navigate("CallForRepair", { data: e });
         }
+    }
+    getInfoByBarCode(e) {
+        const { navigation } = this.props;
+        let code = this._quearyParam(e.data).code;
+        httpApi.getBarCodeInfo(code).then(data => {
+            DeviceEventEmitter.emit('shortRentEquipListUpdate', data); //发监听
+            navigation.pop();
+        });
+    }
+    _quearyParam(url) {
+        var result = {};
+        var query = url.split("?")[1];
+        var queryArr = query.split("&");
+        queryArr.map((item) => {
+            var key = item.split("=")[0];
+            var value = item.split("=")[1];
+            result[key] = value;
+        });
+        return result;
     }
     render() {
         return (

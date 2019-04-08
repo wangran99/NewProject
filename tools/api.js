@@ -285,6 +285,27 @@ class httpapi {
     static getIndexNewNum() {
         return postData("/commList.asmx/IndexNewNum", {});
     }
+
+    //获取短租列表
+    static getShortRentList(count, orderNo) {
+        return postData("/shortrent.asmx/OrderList", { count, orderNo });
+    }
+
+    //获取短租设备清单列表
+    static getShortRentEquipmentList(orderid) {
+        return postData("/shortrent.asmx/OrderEquipmentList", { orderid });
+    }
+
+    //增加短租设备
+    static addShortRentEquipment(orderid, equipmentid, startDate, remark) {
+        return postData("/shortrent.asmx/OrderEquipmentAdd", { orderid, equipmentid, startDate, remark });
+    }
+
+    //删除短租设备
+    static delShortRentEquipment(orderid, equipId) {
+        return postData("/shortrent.asmx/OrderEquipmentDel ", { orderid, equipId });
+    }
+
     static updateUserPhone(userphone) {
         return postData("/commList.asmx/UserUpdatePhone", { userphone });
     }

@@ -97,7 +97,7 @@ export default class newsDetailView extends Component<Props> {
 
         return (
 
-            <ScrollView style={{ backgroundColor: 'white' }}>
+            <ScrollView style={{ backgroundColor: 'lightgray' }}>
                 <View style={styles.container}>
                     <Text style={{ fontSize: 20, color: "black", marginVertical: 20, textAlign: 'center' }} >{this.state.title}</Text>
                     <Text style={{ fontSize: 15 }}>{this.state.addTime}</Text>

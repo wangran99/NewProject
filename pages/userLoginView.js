@@ -23,24 +23,33 @@ export default class userLoginView extends Component<Props> {
     //     };
     // };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            userName: '',
+            password: '',
+        };
+        const { navigation } = this.props;
+        this.account = navigation.getParam('account', 1);
+    }
     _onPressButton() {
         // Alert.alert('You tapped the button!'+local.get("code"));
         // local.get('code').then((code) => {
         //     console.log("get code:"+ code);
         // });
-        //    httpApi.personLogin(this.state.userName, this.state.password)
-        httpApi.personLogin('cs', 'yhj', '123456')
+        httpApi.personLogin(this.account, this.state.userName, this.state.password)
+            //   httpApi.personLogin('cs', 'yhj', '123456')
             .then((data) => {
                 let code = data.code;
                 if (code == 1000) {
-                    local.set("username", "yhj");
-                    local.set("password", "123456");
+                    local.set("username", this.state.userName);
+                    local.set("password", this.state.password);
                     local.set("uid", data.uId);
                     httpApi.saveLogin({
-                        account: 'cs',
-                        username: 'yhj',
-                        password: '123456',
-                        uid: 18
+                        account: this.account,
+                        username: this.state.userName,
+                        password: this.state.password,
+                        uid: data.uId
                         // uid: 15
                     });
                     this.props.navigation.navigate('Main');
@@ -70,8 +79,8 @@ export default class userLoginView extends Component<Props> {
                         onChangeText={(password) => this.setState({ password })}
                     />
                     {/*登录*/}
-                    <View style={styles.loginBtnStyle}>
-                        <Button style={{ color: 'white' }} title="登录" onPress={this._onPressButton.bind(this)} />
+                    <View style={{ marginVertical: 20, marginHorizontal: 10 }} >
+                        <Button style={{ width: width * 0.8, }} title='登录' onPress={this._onPressButton.bind(this)}></Button>
                     </View>
 
                 </View>

@@ -210,7 +210,7 @@ export function postData(url, params = {}) {
                 resolve(response.data);
             }).catch(e => {
                 console.warn("my error:" + JSON.stringify(e));
-                Alert.alert('错误', JSON.stringify(e));
+                // Alert.alert('错误', JSON.stringify(e));
                 reject(e);
             });
         })
@@ -222,7 +222,7 @@ export function postData(url, params = {}) {
                 resolve(response.data);
             }).catch(e => {
                 console.warn("post2 error:" + JSON.stringify(e));
-                Alert.alert('错误', JSON.stringify(e));
+                // Alert.alert('错误', JSON.stringify(e));
                 reject(e);
             });
         });

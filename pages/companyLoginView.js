@@ -23,7 +23,10 @@ export default class companyLoginView extends Component<Props> {
 
     constructor(props) {
         super(props);
-        this.state = { code: '66' };
+        this.state = {
+            companyCode: '',
+            password: '',
+        };
     }
 
     _onPressButton() {
@@ -33,8 +36,8 @@ export default class companyLoginView extends Component<Props> {
         //     Alert.alert('title123', JSON.stringify(data));
         //     console.warn("response:"+JSON.stringify(data));
         //  });
-        //    httpApi.companyLogin({ account: this.state.companyCode, psw: this.state.password })
-        httpApi.companyLogin({ username: 'cs', password: '123456' })
+            httpApi.companyLogin({ username: this.state.companyCode, password: this.state.password })
+     //   httpApi.companyLogin({ username: 'cs', password: '123456' })
             .then((data) => {
                 let code = data.code;
                 if (code == 1000) {
@@ -69,9 +72,9 @@ export default class companyLoginView extends Component<Props> {
                         secureTextEntry={true}
                     />
                     {/*登录*/}
-                    <View style={styles.loginBtnStyle}>
-                        <Button style={{ color: 'white' }} title="登录" onPress={this._onPressButton.bind(this)} />
-                    </View>
+                    <View style={{ marginVertical: 20, marginHorizontal: 10 }} >
+                            <Button style={{ width: width * 0.8, }} title='登录' onPress={this._onPressButton.bind(this)}></Button>
+                        </View>
                     {/* <AButton type='primary' size={'large'} style={{ margin: 16 }} >登陆antd</AButton> */}
                 </View>
             </ScrollView>

@@ -17,29 +17,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -53,6 +37,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>需要扫描权限以便扫描二维码</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>需要位置信息权限以便确定发送图片的地理信息</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>需要位置信息权限以便确定发送图片的地理信息</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>需要读取本地图片权限以便解析本地二维码图片</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -73,5 +65,15 @@
 		<string>antfill.ttf</string>
 		<string>antoutline.ttf</string>
 	</array>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

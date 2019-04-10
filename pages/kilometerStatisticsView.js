@@ -105,7 +105,7 @@ export default class kilometerStatisticsView extends Component<Props> {
                             date={this.state.start}
                             mode='date'
                             // placeholder='请选择时间'
-                            minDate="2010-01-01"
+                            minDate="2015-01-01"
                             maxDate="2050-01-01"
                             format='YYYY-MM-DD'      //这里定义时间的样式
                             // format='YYYY-MM-DD HH:mm'      //⚠️⚠️⚠️如果想使用24小时的时间制度这里的hh要使用大写的HH....哈哈哈
@@ -139,7 +139,7 @@ export default class kilometerStatisticsView extends Component<Props> {
                             date={this.state.end}
                             mode='date'
                             // placeholder='请选择时间'
-                            minDate="2010-01-01"
+                            minDate="2015-01-01"
                             maxDate="2050-01-01"
                             format='YYYY-MM-DD'      //这里定义时间的样式
                             // format='YYYY-MM-DD HH:mm'      //⚠️⚠️⚠️如果想使用24小时的时间制度这里的hh要使用大写的HH....哈哈哈
@@ -154,7 +154,7 @@ export default class kilometerStatisticsView extends Component<Props> {
                                 },
                                 dateInput: {
                                     fontSize: 16,
-                                    marginLeft: 5,
+                                    marginLeft: 6,
                                     borderRadius: 5,
                                     borderWidth: 1 //设置日期选择器的样式，这里可以去掉边框，这样看起来是不是更漂亮呢😊😯
                                 }
